@@ -86,7 +86,9 @@ DB::table('profiles')
 
 ### Eloquent
 
-You can use common table expressions in Eloquent queries with the `QueriesExpressions` trait:
+You can use common table expressions in Eloquent queries.
+
+In Laravel 5.5–5.7, this requires the `QueriesExpressions` trait:
 
 ```php
 class User extends Model

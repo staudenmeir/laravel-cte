@@ -2,10 +2,7 @@
 
 namespace Staudenmeir\LaravelCte\Query;
 
-use Closure;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as Base;
-use InvalidArgumentException;
 
 class Builder extends Base
 {
@@ -37,7 +34,7 @@ class Builder extends Base
      */
     public function withExpression($name, $query, array $columns = null, $recursive = false)
     {
-        list($query, $bindings) = $this->createSub($query);
+        [$query, $bindings] = $this->createSub($query);
 
         $this->expressions[] = compact('name', 'query', 'columns', 'recursive');
 
@@ -68,7 +65,7 @@ class Builder extends Base
      */
     public function insertUsing(array $columns, $query)
     {
-        list($sql, $bindings) = $this->createSub($query);
+        [$sql, $bindings] = $this->createSub($query);
 
         $bindings = array_merge($this->bindings['expressions'], $bindings);
 
@@ -76,49 +73,5 @@ class Builder extends Base
             $this->grammar->compileInsertUsing($this, $columns, $sql),
             $this->cleanBindings($bindings)
         );
-    }
-
-    /**
-     * Create a subquery and parse it.
-     *
-     * @param  \Closure|\Illuminate\Database\Query\Builder|string $query
-     * @return array
-     */
-    protected function createSub($query)
-    {
-        if ($query instanceof Closure) {
-            $callback = $query;
-
-            $callback($query = $this->forSubQuery());
-        }
-
-        return $this->parseSub($query);
-    }
-
-    /**
-     * Create a new query instance for a sub-query.
-     *
-     * @return \Illuminate\Database\Query\Builder
-     */
-    protected function forSubQuery()
-    {
-        return $this->newQuery();
-    }
-
-    /**
-     * Parse the subquery into SQL and bindings.
-     *
-     * @param  mixed  $query
-     * @return array
-     */
-    protected function parseSub($query)
-    {
-        if ($query instanceof self || $query instanceof EloquentBuilder) {
-            return [$query->toSql(), $query->getBindings()];
-        } elseif (is_string($query)) {
-            return [$query, []];
-        } else {
-            throw new InvalidArgumentException; // @codeCoverageIgnore
-        }
     }
 }
