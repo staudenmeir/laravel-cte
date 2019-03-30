@@ -3,9 +3,17 @@
 namespace Staudenmeir\LaravelCte\Query;
 
 use Closure;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as Base;
+use Illuminate\Database\Query\Grammars\Grammar;
+use Illuminate\Database\Query\Processors\Processor;
 use InvalidArgumentException;
+use RuntimeException;
+use Staudenmeir\LaravelCte\Grammars\MySqlGrammar;
+use Staudenmeir\LaravelCte\Grammars\PostgresGrammar;
+use Staudenmeir\LaravelCte\Grammars\SQLiteGrammar;
+use Staudenmeir\LaravelCte\Grammars\SqlServerGrammar;
 
 class Builder extends Base
 {
@@ -18,12 +26,44 @@ class Builder extends Base
 
     /**
      * Create a new query builder instance.
+     *
+     * @param  \Illuminate\Database\Connection  $connection
+     * @param  \Illuminate\Database\Query\Grammars\Grammar|null  $grammar
+     * @param  \Illuminate\Database\Query\Processors\Processor|null  $processor
+     * @return void
      */
-    public function __construct()
+    public function __construct(Connection $connection, Grammar $grammar = null, Processor $processor = null)
     {
-        parent::__construct(...func_get_args());
+        $grammar = $grammar ?: $this->getQueryGrammar($connection);
+        $processor = $processor ?: $connection->getPostProcessor();
+
+        parent::__construct($connection, $grammar, $processor);
 
         $this->bindings = ['expressions' => []] + $this->bindings;
+    }
+
+    /**
+     * Get the query grammar.
+     *
+     * @param  \Illuminate\Database\Connection  $connection
+     * @return \Illuminate\Database\Query\Grammars\Grammar
+     */
+    protected function getQueryGrammar(Connection $connection)
+    {
+        $driver = $connection->getDriverName();
+
+        switch ($driver) {
+            case 'mysql':
+                return new MySqlGrammar;
+            case 'pgsql':
+                return new PostgresGrammar;
+            case 'sqlite':
+                return new SQLiteGrammar;
+            case 'sqlsrv':
+                return new SqlServerGrammar;
+        }
+
+        throw new RuntimeException('This database is not supported.'); // @codeCoverageIgnore
     }
 
     /**

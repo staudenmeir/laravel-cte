@@ -6,7 +6,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Base;
-use Staudenmeir\LaravelCte\DatabaseServiceProvider;
 
 abstract class TestCase extends Base
 {
@@ -31,6 +30,7 @@ abstract class TestCase extends Base
             ['parent_id' => 1],
             ['parent_id' => 2],
         ]);
+
         DB::table('posts')->insert([
             ['user_id' => 1],
             ['user_id' => 2],
@@ -44,10 +44,5 @@ abstract class TestCase extends Base
         $app['config']->set('database.default', 'testing');
 
         $app['config']->set('database.connections.testing', $config[getenv('DB') ?: 'sqlite']);
-    }
-
-    protected function getPackageProviders($app)
-    {
-        return [DatabaseServiceProvider::class];
     }
 }

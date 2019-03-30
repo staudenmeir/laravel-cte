@@ -2,6 +2,8 @@
 
 namespace Staudenmeir\LaravelCte\Eloquent;
 
+use Staudenmeir\LaravelCte\Query\Builder;
+
 trait QueriesExpressions
 {
     /**
@@ -11,6 +13,6 @@ trait QueriesExpressions
      */
     protected function newBaseQueryBuilder()
     {
-        return $this->getConnection()->query();
+        return new Builder($this->getConnection());
     }
 }

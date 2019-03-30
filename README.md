@@ -18,6 +18,7 @@ Supports Laravel 5.5+.
 - [SELECT Queries](#select-queries)
 - [INSERT/UPDATE/DELETE Queries](#insertupdatedelete-queries)
 - [Eloquent](#eloquent)
+- [Lumen](#lumen)
 
 ### SELECT Queries
 
@@ -103,4 +104,14 @@ $query = User::whereNull('parent_id')
 $tree = User::from('tree')
     ->withRecursiveExpression('tree', $query)
     ->get();
+```
+
+### Lumen
+
+If you are using Lumen, you have to instantiate the query builder manually:
+
+```php
+$builder = new \Staudenmeir\LaravelCte\Query\Builder(app('db')->connection());
+
+$result = $builder->from(...)->withExpression(...)->get();
 ```

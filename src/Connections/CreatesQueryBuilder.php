@@ -13,6 +13,6 @@ trait CreatesQueryBuilder
      */
     public function query()
     {
-        return new Builder($this, $this->getQueryGrammar(), $this->getPostProcessor());
+        return new Builder($this);
     }
 }
