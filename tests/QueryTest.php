@@ -8,6 +8,7 @@ use Illuminate\Database\Query\Processors\Processor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use PDO;
+use Staudenmeir\LaravelCte\DatabaseServiceProvider;
 use Staudenmeir\LaravelCte\Query\Builder;
 
 class QueryTest extends TestCase
@@ -189,5 +190,10 @@ class QueryTest extends TestCase
         $processor = $this->createMock(Processor::class);
 
         return new Builder($connection, new $grammar, $processor);
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [DatabaseServiceProvider::class];
     }
 }
