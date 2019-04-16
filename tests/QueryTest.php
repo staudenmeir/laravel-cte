@@ -18,7 +18,7 @@ class QueryTest extends TestCase
         $rows = DB::table('u')
             ->select('u.id')
             ->withExpression('u', DB::table('users'))
-            ->withExpression('p', function ($query) {
+            ->withExpression('p', function (Builder $query) {
                 $query->from('posts');
             })
             ->join('p', 'p.user_id', '=', 'u.id')
@@ -81,7 +81,13 @@ class QueryTest extends TestCase
 
     public function testWithRecursiveExpression()
     {
-        $query = 'select 1 union all select number + 1 from numbers where number < 3';
+        $query = DB::query()
+            ->selectRaw('1')
+            ->unionAll(
+                DB::table('numbers')
+                    ->selectRaw('number + 1')
+                    ->where('number', '<', 3)
+            );
 
         $rows = DB::table('numbers')
             ->withRecursiveExpression('numbers', $query, ['number'])
@@ -92,8 +98,14 @@ class QueryTest extends TestCase
 
     public function testWithRecursiveExpressionMySql()
     {
-        $query = $this->getBuilder('MySql')->selectRaw('1')
-            ->unionAll($this->getBuilder('MySql')->selectRaw('number + 1')->from('numbers')->where('number', '<', 3));
+        $query = $this->getBuilder('MySql')
+            ->selectRaw('1')
+            ->unionAll(
+                $this->getBuilder('MySql')
+                    ->selectRaw('number + 1')
+                    ->from('numbers')
+                    ->where('number', '<', 3)
+            );
         $builder = $this->getBuilder('MySql');
         $builder->from('numbers')
             ->withRecursiveExpression('numbers', $query, ['number']);
@@ -105,8 +117,14 @@ class QueryTest extends TestCase
 
     public function testWithRecursiveExpressionPostgres()
     {
-        $query = $this->getBuilder('Postgres')->selectRaw('1')
-            ->unionAll($this->getBuilder('Postgres')->selectRaw('number + 1')->from('numbers')->where('number', '<', 3));
+        $query = $this->getBuilder('Postgres')
+            ->selectRaw('1')
+            ->unionAll(
+                $this->getBuilder('Postgres')
+                    ->selectRaw('number + 1')
+                    ->from('numbers')
+                    ->where('number', '<', 3)
+            );
         $builder = $this->getBuilder('Postgres');
         $builder->from('numbers')
             ->withRecursiveExpression('numbers', $query, ['number']);
@@ -118,21 +136,46 @@ class QueryTest extends TestCase
 
     public function testWithRecursiveExpressionSQLite()
     {
-        $query = $this->getBuilder('SQLite')->selectRaw('1')
-            ->unionAll($this->getBuilder('SQLite')->selectRaw('number + 1')->from('numbers')->where('number', '<', 3));
+        $query = $this->getBuilder('SQLite')
+            ->selectRaw('1')
+            ->unionAll(
+                $this->getBuilder('SQLite')
+                    ->selectRaw('number + 1')
+                    ->from('numbers')
+                    ->where('number', '<', 3)
+            );
         $builder = $this->getBuilder('SQLite');
         $builder->from('numbers')
             ->withRecursiveExpression('numbers', $query, ['number']);
 
-        $expected = 'with recursive "numbers" ("number") as ('.$query->toSql().') select * from "numbers"';
+        $expected = 'with recursive "numbers" ("number") as (select * from (select 1) union all select number + 1 from "numbers" where "number" < ?) select * from "numbers"';
         $this->assertEquals($expected, $builder->toSql());
         $this->assertEquals([3], $builder->getRawBindings()['expressions']);
     }
 
+    public function testUnionSQLite()
+    {
+        $builder = $this->getBuilder('SQLite')
+            ->from('users')
+            ->unionAll(
+                $this->getBuilder('SQLite')
+                    ->from('posts')
+            );
+
+        $expected = 'select * from (select * from "users") union all select * from (select * from "posts")';
+        $this->assertEquals($expected, $builder->toSql());
+    }
+
     public function testWithRecursiveExpressionSqlServer()
     {
-        $query = $this->getBuilder('SqlServer')->selectRaw('1')
-            ->unionAll($this->getBuilder('SqlServer')->selectRaw('number + 1')->from('numbers')->where('number', '<', 3));
+        $query = $this->getBuilder('SqlServer')
+            ->selectRaw('1')
+            ->unionAll(
+                $this->getBuilder('SqlServer')
+                    ->selectRaw('number + 1')
+                    ->from('numbers')
+                    ->where('number', '<', 3)
+            );
         $builder = $this->getBuilder('SqlServer');
         $builder->from('numbers')
             ->withRecursiveExpression('numbers', $query, ['number']);

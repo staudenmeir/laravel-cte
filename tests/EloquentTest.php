@@ -19,7 +19,13 @@ class EloquentTest extends TestCase
 
     public function testWithRecursiveExpression()
     {
-        $query = 'select * from users where id = 3 union all select users.* from users inner join parents on parents.parent_id = users.id';
+        $query = User::query()
+            ->where('id', 3)
+            ->unionAll(
+                User::query()
+                    ->select('users.*')
+                    ->join('parents', 'parents.parent_id', '=', 'users.id')
+            );
 
         $users = User::from('parents')
             ->withRecursiveExpression('parents', $query)
