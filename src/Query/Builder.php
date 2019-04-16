@@ -7,10 +7,10 @@ use Illuminate\Database\Query\Builder as Base;
 use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Database\Query\Processors\Processor;
 use RuntimeException;
-use Staudenmeir\LaravelCte\Grammars\MySqlGrammar;
-use Staudenmeir\LaravelCte\Grammars\PostgresGrammar;
-use Staudenmeir\LaravelCte\Grammars\SQLiteGrammar;
-use Staudenmeir\LaravelCte\Grammars\SqlServerGrammar;
+use Staudenmeir\LaravelCte\Query\Grammars\MySqlGrammar;
+use Staudenmeir\LaravelCte\Query\Grammars\PostgresGrammar;
+use Staudenmeir\LaravelCte\Query\Grammars\SQLiteGrammar;
+use Staudenmeir\LaravelCte\Query\Grammars\SqlServerGrammar;
 
 class Builder extends Base
 {

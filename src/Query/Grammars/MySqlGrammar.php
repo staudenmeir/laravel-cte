@@ -1,6 +1,6 @@
 <?php
 
-namespace Staudenmeir\LaravelCte\Grammars;
+namespace Staudenmeir\LaravelCte\Query\Grammars;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\MySqlGrammar as Base;
