@@ -186,7 +186,7 @@ class QueryTest extends TestCase
     {
         $connection = $this->createMock(Connection::class);
         $connection->method('getPdo')->willReturn($this->createMock(PDO::class));
-        $grammar = 'Staudenmeir\LaravelCte\Grammars\\'.$database.'Grammar';
+        $grammar = 'Staudenmeir\LaravelCte\Query\Grammars\\'.$database.'Grammar';
         $processor = $this->createMock(Processor::class);
 
         return new Builder($connection, new $grammar, $processor);
