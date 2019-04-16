@@ -15,11 +15,11 @@ class ConnectionFactory extends Base
     /**
      * Create a new connection instance.
      *
-     * @param  string  $driver
-     * @param  \PDO|\Closure  $connection
-     * @param  string  $database
-     * @param  string  $prefix
-     * @param  array  $config
+     * @param string $driver
+     * @param \PDO|\Closure $connection
+     * @param string $database
+     * @param string $prefix
+     * @param array $config
      * @return \Illuminate\Database\Connection
      *
      * @throws \InvalidArgumentException
