@@ -27,9 +27,9 @@ class Builder extends Base
     /**
      * Create a new query builder instance.
      *
-     * @param  \Illuminate\Database\Connection  $connection
-     * @param  \Illuminate\Database\Query\Grammars\Grammar|null  $grammar
-     * @param  \Illuminate\Database\Query\Processors\Processor|null  $processor
+     * @param \Illuminate\Database\Connection $connection
+     * @param \Illuminate\Database\Query\Grammars\Grammar|null $grammar
+     * @param \Illuminate\Database\Query\Processors\Processor|null $processor
      * @return void
      */
     public function __construct(Connection $connection, Grammar $grammar = null, Processor $processor = null)
@@ -45,7 +45,7 @@ class Builder extends Base
     /**
      * Get the query grammar.
      *
-     * @param  \Illuminate\Database\Connection  $connection
+     * @param \Illuminate\Database\Connection $connection
      * @return \Illuminate\Database\Query\Grammars\Grammar
      */
     protected function getQueryGrammar(Connection $connection)
@@ -69,10 +69,10 @@ class Builder extends Base
     /**
      * Add a common table expression to the query.
      *
-     * @param  string  $name
-     * @param  \Closure|\Illuminate\Database\Query\Builder|string  $query
-     * @param  array|null  $columns
-     * @param  bool  $recursive
+     * @param string $name
+     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
+     * @param array|null $columns
+     * @param bool $recursive
      * @return $this
      */
     public function withExpression($name, $query, array $columns = null, $recursive = false)
@@ -89,9 +89,9 @@ class Builder extends Base
     /**
      * Add a recursive common table expression to the query.
      *
-     * @param  string  $name
-     * @param  \Closure|\Illuminate\Database\Query\Builder|string $query
-     * @param  array|null  $columns
+     * @param string $name
+     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
+     * @param array|null $columns
      * @return $this
      */
     public function withRecursiveExpression($name, $query, $columns = null)
@@ -102,8 +102,8 @@ class Builder extends Base
     /**
      * Insert new records into the table using a subquery.
      *
-     * @param  array  $columns
-     * @param  \Closure|\Illuminate\Database\Query\Builder|string  $query
+     * @param array $columns
+     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
      * @return bool
      */
     public function insertUsing(array $columns, $query)
@@ -121,7 +121,7 @@ class Builder extends Base
     /**
      * Create a subquery and parse it.
      *
-     * @param  \Closure|\Illuminate\Database\Query\Builder|string $query
+     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
      * @return array
      */
     protected function createSub($query)
@@ -148,7 +148,7 @@ class Builder extends Base
     /**
      * Parse the subquery into SQL and bindings.
      *
-     * @param  mixed  $query
+     * @param mixed $query
      * @return array
      */
     protected function parseSub($query)

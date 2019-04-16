@@ -17,12 +17,12 @@ trait CompilesExpressions
     /**
      * Compile the common table expressions.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param \Illuminate\Database\Query\Builder $query
      * @return string
      */
     public function compileExpressions(Builder $query)
     {
-        if (! $query->expressions) {
+        if (!$query->expressions) {
             return '';
         }
 
@@ -42,7 +42,7 @@ trait CompilesExpressions
     /**
      * Get the "recursive" keyword.
      *
-     * @param  array  $expressions
+     * @param array $expressions
      * @return string
      */
     protected function recursiveKeyword(array $expressions)
@@ -53,9 +53,9 @@ trait CompilesExpressions
     /**
      * Compile an insert statement using a subquery into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $columns
-     * @param  string  $sql
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array $columns
+     * @param string $sql
      * @return string
      */
     public function compileInsertUsing(Builder $query, array $columns, string $sql)
@@ -66,8 +66,8 @@ trait CompilesExpressions
     /**
      * Compile an update statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $values
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array $values
      * @return string
      */
     public function compileUpdate(Builder $query, $values)
@@ -78,7 +78,7 @@ trait CompilesExpressions
     /**
      * Compile a delete statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param \Illuminate\Database\Query\Builder $query
      * @return string
      */
     public function compileDelete(Builder $query)

@@ -12,9 +12,9 @@ class MySqlGrammar extends Base
     /**
      * Compile an insert statement using a subquery into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $columns
-     * @param  string  $sql
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array $columns
+     * @param string $sql
      * @return string
      */
     public function compileInsertUsing(Builder $query, array $columns, string $sql)
