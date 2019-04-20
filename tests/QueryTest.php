@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use DateTime;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder as BaseBuilder;
 use Illuminate\Database\Query\Processors\Processor;
@@ -206,7 +207,10 @@ class QueryTest extends TestCase
 
         DB::table('posts')
             ->withExpression('u', DB::table('users')->where('id', '>', 1))
-            ->update(['user_id' => DB::raw('(select min(id) from u)')]);
+            ->update([
+                'user_id' => DB::raw('(select min(id) from u)'),
+                'updated_at' => new DateTime(),
+            ]);
 
         $this->assertEquals([2, 2], DB::table('posts')->pluck('user_id')->all());
     }
