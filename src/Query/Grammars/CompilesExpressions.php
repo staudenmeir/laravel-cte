@@ -33,7 +33,7 @@ trait CompilesExpressions
         foreach ($query->expressions as $expression) {
             $columns = $expression['columns'] ? '('.$this->columnize($expression['columns']).') ' : '';
 
-            $statements[] = $this->wrap($expression['name']).' '.$columns.'as ('.$expression['query'].')';
+            $statements[] = $this->wrapTable($expression['name']).' '.$columns.'as ('.$expression['query'].')';
         }
 
         return 'with '.$recursive.implode($statements, ', ');
