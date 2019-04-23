@@ -31,7 +31,7 @@ class Builder extends Base
      */
     public function __construct(Connection $connection, Grammar $grammar = null, Processor $processor = null)
     {
-        $grammar = $grammar ?: $this->getQueryGrammar($connection);
+        $grammar = $grammar ?: $connection->withTablePrefix($this->getQueryGrammar($connection));
         $processor = $processor ?: $connection->getPostProcessor();
 
         parent::__construct($connection, $grammar, $processor);
