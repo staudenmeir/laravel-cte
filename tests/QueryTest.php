@@ -7,7 +7,6 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder as BaseBuilder;
 use Illuminate\Database\Query\Processors\Processor;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use PDO;
 use Staudenmeir\LaravelCte\DatabaseServiceProvider;
 use Staudenmeir\LaravelCte\Query\Builder;
@@ -201,10 +200,6 @@ class QueryTest extends TestCase
 
     public function testUpdate()
     {
-        if (Str::contains(DB::getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION), 'MariaDB')) {
-            $this->markTestSkipped();
-        }
-
         DB::table('posts')
             ->withExpression('u', DB::table('users')->where('id', '>', 1))
             ->update([
@@ -217,10 +212,6 @@ class QueryTest extends TestCase
 
     public function testDelete()
     {
-        if (Str::contains(DB::getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION), 'MariaDB')) {
-            $this->markTestSkipped();
-        }
-
         DB::table('posts')
             ->withExpression('u', DB::table('users')->where('id', '>', 1))
             ->whereIn('user_id', DB::table('u')->select('id'))
