@@ -6,7 +6,8 @@
 [![License](https://poser.pugx.org/staudenmeir/laravel-cte/license)](https://packagist.org/packages/staudenmeir/laravel-cte)
 
 ## Introduction
-This Laravel extension adds support for common table expressions (CTE) to the query builder and Eloquent.    
+This Laravel extension adds support for common table expressions (CTE) to the query builder and Eloquent.
+
 Supports Laravel 5.5+.
 
 ## Compatibility
