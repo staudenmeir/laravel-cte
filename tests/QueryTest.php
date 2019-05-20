@@ -220,6 +220,19 @@ class QueryTest extends TestCase
         $this->assertEquals([1], DB::table('posts')->pluck('user_id')->all());
     }
 
+    public function testOffsetSqlServer()
+    {
+        $expected = 'with [p] as (select * from [posts]) select * from (select *, row_number() over (order by (select 0)) as row_num from [users] inner join [p] on [p].[user_id] = [users].[id]) as temp_table where row_num >= 6 order by row_num';
+
+        $query = $this->getBuilder('SqlServer')
+            ->from('users')
+            ->withExpression('p', $this->getBuilder('SqlServer')->from('posts'))
+            ->join('p', 'p.user_id', '=', 'users.id')
+            ->offset(5);
+
+        $this->assertEquals($expected, $query->toSql());
+    }
+
     protected function getBuilder($database)
     {
         $connection = $this->createMock(Connection::class);
