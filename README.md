@@ -6,8 +6,17 @@
 [![License](https://poser.pugx.org/staudenmeir/laravel-cte/license)](https://packagist.org/packages/staudenmeir/laravel-cte)
 
 ## Introduction
-This Laravel extension adds support for common table expressions (CTE) to the query builder and Eloquent.    
+This Laravel extension adds support for common table expressions (CTE) to the query builder and Eloquent.
+
 Supports Laravel 5.5+.
+
+## Compatibility
+
+- MySQL 8.0+
+- MariaDB 10.2+
+- PostgreSQL 9.4+
+- SQLite 3.8.3+
+- SQL Server 2008+
  
 ## Installation
 
@@ -18,6 +27,7 @@ Supports Laravel 5.5+.
 - [SELECT Queries](#select-queries)
 - [INSERT/UPDATE/DELETE Queries](#insertupdatedelete-queries)
 - [Eloquent](#eloquent)
+  - [Recursive Relationships](#recursive-relationships)
 - [Lumen](#lumen)
 
 ### SELECT Queries
@@ -105,6 +115,10 @@ $tree = User::from('tree')
     ->withRecursiveExpression('tree', $query)
     ->get();
 ```
+
+#### Recursive Relationships
+
+If you want to implement recursive relationships, you can use this package: [staudenmeir/laravel-adjacency-list](https://github.com/staudenmeir/laravel-adjacency-list)
 
 ### Lumen
 
