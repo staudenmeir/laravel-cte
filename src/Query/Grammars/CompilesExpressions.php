@@ -12,6 +12,8 @@ trait CompilesExpressions
     public function __construct()
     {
         array_unshift($this->selectComponents, 'expressions');
+
+        $this->selectComponents[] = 'recursionLimit';
     }
 
     /**
@@ -51,6 +53,21 @@ trait CompilesExpressions
     }
 
     /**
+     * Compile the recursion limit.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return string
+     */
+    public function compileRecursionLimit(Builder $query)
+    {
+        if (is_null($query->recursionLimit)) {
+            return '';
+        }
+
+        return 'option (maxrecursion '.(int) $query->recursionLimit.')';
+    }
+
+    /**
      * Compile an insert statement using a subquery into SQL.
      *
      * @param \Illuminate\Database\Query\Builder $query
@@ -60,7 +77,11 @@ trait CompilesExpressions
      */
     public function compileInsertUsing(Builder $query, array $columns, string $sql)
     {
-        return $this->compileExpressions($query).' '.parent::compileInsertUsing($query, $columns, $sql);
+        $expressions = $this->compileExpressions($query);
+
+        $recursionLimit = $this->compileRecursionLimit($query);
+
+        return $expressions.' '.parent::compileInsertUsing($query, $columns, $sql).' '.$recursionLimit;
     }
 
     /**
