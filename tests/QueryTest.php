@@ -186,6 +186,14 @@ class QueryTest extends TestCase
         $this->assertEquals([3], $builder->getRawBindings()['expressions']);
     }
 
+    public function testRecursionLimit()
+    {
+        $builder = $this->getBuilder('SqlServer');
+        $builder->from('users')->recursionLimit(100);
+
+        $this->assertEquals('select * from [users] option (maxrecursion 100)', $builder->toSql());
+    }
+
     public function testInsertUsing()
     {
         if (! method_exists(BaseBuilder::class, 'insertUsing')) {
@@ -197,6 +205,21 @@ class QueryTest extends TestCase
             ->insertUsing(['user_id'], DB::table('u'));
 
         $this->assertEquals([1, 2, 2, 3], DB::table('posts')->pluck('user_id')->all());
+    }
+
+    public function testInsertUsingWithRecursionLimit()
+    {
+        if (! method_exists(BaseBuilder::class, 'insertUsing')) {
+            $this->markTestSkipped();
+        }
+
+        $builder = $this->getBuilder('SqlServer');
+        $query = ' insert into [posts] ([id]) select [id] from [users] option (maxrecursion 100)';
+        $builder->getConnection()->expects($this->once())->method('insert')->with($query, []);
+
+        $builder->from('posts')
+            ->recursionLimit(100)
+            ->insertUsing(['id'], $this->getBuilder('SqlServer')->from('users')->select('id'));
     }
 
     public function testUpdate()
@@ -245,7 +268,6 @@ class QueryTest extends TestCase
     protected function getBuilder($database)
     {
         $connection = $this->createMock(Connection::class);
-        $connection->method('getPdo')->willReturn($this->createMock(PDO::class));
         $grammar = 'Staudenmeir\LaravelCte\Query\Grammars\\'.$database.'Grammar';
         $processor = $this->createMock(Processor::class);
 

@@ -25,6 +25,13 @@ class Builder extends Base
     public $expressions = [];
 
     /**
+     * The recursion limit.
+     *
+     * @var int
+     */
+    public $recursionLimit;
+
+    /**
      * Create a new query builder instance.
      *
      * @param \Illuminate\Database\Connection $connection
@@ -97,6 +104,19 @@ class Builder extends Base
     public function withRecursiveExpression($name, $query, $columns = null)
     {
         return $this->withExpression($name, $query, $columns, true);
+    }
+
+    /**
+     * Set the recursion limit of the query.
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function recursionLimit($value)
+    {
+        $this->recursionLimit = $value;
+
+        return $this;
     }
 
     /**
