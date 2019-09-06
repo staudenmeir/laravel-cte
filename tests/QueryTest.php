@@ -79,13 +79,7 @@ class QueryTest extends TestCase
 
     public function testWithRecursiveExpression()
     {
-        $query = DB::query()
-            ->selectRaw('1')
-            ->unionAll(
-                DB::table('numbers')
-                    ->selectRaw('number + 1')
-                    ->where('number', '<', 3)
-            );
+        $query = 'select 1 union all select number + 1 from numbers where number < 3';
 
         $rows = DB::table('numbers')
             ->withRecursiveExpression('numbers', $query, ['number'])
