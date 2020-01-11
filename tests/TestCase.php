@@ -47,6 +47,6 @@ abstract class TestCase extends Base
 
         $app['config']->set('database.default', 'testing');
 
-        $app['config']->set('database.connections.testing', $config[getenv('DB') ?: 'sqlite']);
+        $app['config']->set('database.connections.testing', $config[getenv('DATABASE') ?: 'sqlite']);
     }
 }
