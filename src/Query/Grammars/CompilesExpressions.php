@@ -91,7 +91,7 @@ trait CompilesExpressions
      * @param array $values
      * @return string
      */
-    public function compileUpdate(Builder $query, $values)
+    public function compileUpdate(Builder $query, array $values)
     {
         return $this->compileExpressions($query).' '.parent::compileUpdate($query, $values);
     }
