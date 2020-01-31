@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/staudenmeir/laravel-cte.svg?branch=master)](https://travis-ci.org/staudenmeir/laravel-cte)
+![CI](https://github.com/staudenmeir/laravel-cte/workflows/CI/badge.svg)
 [![Code Coverage](https://scrutinizer-ci.com/g/staudenmeir/laravel-cte/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/staudenmeir/laravel-cte/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/staudenmeir/laravel-cte/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/staudenmeir/laravel-cte/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/staudenmeir/laravel-cte/v/stable)](https://packagist.org/packages/staudenmeir/laravel-cte)
