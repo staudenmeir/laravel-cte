@@ -3,6 +3,7 @@
 namespace Staudenmeir\LaravelCte\Query\Grammars;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Str;
 
 trait CompilesExpressions
 {
@@ -81,7 +82,12 @@ trait CompilesExpressions
 
         $recursionLimit = $this->compileRecursionLimit($query);
 
-        return $expressions.' '.parent::compileInsertUsing($query, $columns, $sql).' '.$recursionLimit;
+        $compiled = parent::compileInsertUsing($query, $columns, $sql);
+
+        return (string) Str::of($compiled)
+            ->prepend($expressions, ' ')
+            ->append(' ', $recursionLimit)
+            ->trim();
     }
 
     /**
@@ -93,7 +99,11 @@ trait CompilesExpressions
      */
     public function compileUpdate(Builder $query, array $values)
     {
-        return $this->compileExpressions($query).' '.parent::compileUpdate($query, $values);
+        $compiled = parent::compileUpdate($query, $values);
+
+        return (string) Str::of($compiled)
+            ->prepend($this->compileExpressions($query), ' ')
+            ->trim();
     }
 
     /**
@@ -120,6 +130,10 @@ trait CompilesExpressions
      */
     public function compileDelete(Builder $query)
     {
-        return $this->compileExpressions($query).' '.parent::compileDelete($query);
+        $compiled = parent::compileDelete($query);
+
+        return (string) Str::of($compiled)
+            ->prepend($this->compileExpressions($query), ' ')
+            ->trim();
     }
 }
