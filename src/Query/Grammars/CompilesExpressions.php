@@ -38,7 +38,7 @@ trait CompilesExpressions
             $statements[] = $this->wrapTable($expression['name']).' '.$columns.'as ('.$expression['query'].')';
         }
 
-        return 'with '.$recursive.implode($statements, ', ');
+        return 'with '.$recursive.implode(', ', $statements);
     }
 
     /**
