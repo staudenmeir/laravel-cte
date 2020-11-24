@@ -51,10 +51,14 @@ jobs:
         if: matrix.database == 'mysql' && matrix.php < 7.4
       - run: |
           curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-          curl https://packages.microsoft.com/config/ubuntu/18.04/mssql-server-2019.list | sudo tee /etc/apt/sources.list.d/mssql-server-2019.list
-          sudo apt-get update
+          curl https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2017.list | sudo tee /etc/apt/sources.list.d/mssql-server-2017.list
+          sudo apt-get clean && apt-get update
           sudo apt-get install mssql-server
           sudo MSSQL_SA_PASSWORD=Password! MSSQL_PID=developer /opt/mssql/bin/mssql-conf -n setup accept-eula
+          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+          curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+          sudo apt-get update
+          sudo ACCEPT_EULA=Y apt-get install mssql-tools unixodbc-dev
           sudo /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Password! -Q "create database [test]"
         if: matrix.database == 'sqlsrv'
       - run: composer update --no-interaction --no-progress --no-suggest --prefer-dist --prefer-${{ matrix.release }}
