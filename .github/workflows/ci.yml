@@ -45,6 +45,14 @@ jobs:
           tools: pecl
           extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_${{ matrix.database }}, tokenizer, xml
           coverage: ${{ matrix.coverage }}
+        if: matrix.database != 'sqlsrv' || matrix.php != 8.0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          tools: pecl
+          extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_sqlsrv-5.9.0preview1, sqlsrv-5.9.0preview1, tokenizer, xml
+          coverage: ${{ matrix.coverage }}
+        if: matrix.database == 'sqlsrv' && matrix.php == 8.0
       - run: |
           mysql -h 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -u root -ppassword -e "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password'"
           mysql -h 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -u root -ppassword -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'"
