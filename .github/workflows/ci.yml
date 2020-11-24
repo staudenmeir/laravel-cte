@@ -50,7 +50,7 @@ jobs:
         with:
           php-version: 8.0
           tools: pecl
-          extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_sqlsrv-5.9.0preview1, sqlsrv-5.9.0preview1, tokenizer, xml
+          extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_sqlsrv-5.9.0preview1, tokenizer, xml
           coverage: ${{ matrix.coverage }}
         if: matrix.database == 'sqlsrv' && matrix.php == 8.0
       - run: |
