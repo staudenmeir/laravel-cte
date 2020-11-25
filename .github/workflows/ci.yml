@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        php: [7.4, 7.3]
+        php: [8.0, 7.4, 7.3]
         database: [mysql, pgsql, sqlite, sqlsrv]
         release: [stable, lowest]
         include:
@@ -45,6 +45,14 @@ jobs:
           tools: pecl
           extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_${{ matrix.database }}, tokenizer, xml
           coverage: ${{ matrix.coverage }}
+        if: matrix.database != 'sqlsrv' || matrix.php != 8.0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          tools: pecl
+          extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_sqlsrv-5.9.0preview1, tokenizer, xml
+          coverage: ${{ matrix.coverage }}
+        if: matrix.database == 'sqlsrv' && matrix.php == 8.0
       - run: |
           mysql -h 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -u root -ppassword -e "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password'"
           mysql -h 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -u root -ppassword -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'"
@@ -52,6 +60,7 @@ jobs:
       - run: |
           curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
           curl https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2017.list | sudo tee /etc/apt/sources.list.d/mssql-server-2017.list
+          sudo apt-get clean
           sudo apt-get update
           sudo apt-get install mssql-server=14.0.3192.2-2
           sudo MSSQL_SA_PASSWORD=Password! MSSQL_PID=developer /opt/mssql/bin/mssql-conf -n setup accept-eula
