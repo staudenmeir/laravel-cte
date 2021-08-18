@@ -58,13 +58,13 @@ class Builder extends Base
 
         switch ($driver) {
             case 'mysql':
-                return new MySqlGrammar;
+                return new MySqlGrammar();
             case 'pgsql':
-                return new PostgresGrammar;
+                return new PostgresGrammar();
             case 'sqlite':
-                return new SQLiteGrammar;
+                return new SQLiteGrammar();
             case 'sqlsrv':
-                return new SqlServerGrammar;
+                return new SqlServerGrammar();
         }
 
         throw new RuntimeException('This database is not supported.'); // @codeCoverageIgnore

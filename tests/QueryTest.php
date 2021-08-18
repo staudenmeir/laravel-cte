@@ -246,7 +246,7 @@ class QueryTest extends TestCase
         $grammar = 'Staudenmeir\LaravelCte\Query\Grammars\\'.$database.'Grammar';
         $processor = $this->createMock(Processor::class);
 
-        return new Builder($connection, new $grammar, $processor);
+        return new Builder($connection, new $grammar(), $processor);
     }
 
     protected function getPackageProviders($app)
