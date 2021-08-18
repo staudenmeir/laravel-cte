@@ -177,6 +177,80 @@ class QueryTest extends TestCase
         $this->assertEquals([3], $builder->getRawBindings()['expressions']);
     }
 
+    public function testWithMaterializedExpression()
+    {
+        // TODO: 3.35.0+
+        if (DB::connection()->getDriverName() !== 'pgsql') {
+            $this->markTestSkipped();
+        }
+
+        $rows = DB::table('u')
+                  ->select('u.id')
+                  ->withMaterializedExpression('u', DB::table('users'))
+                  ->get();
+
+        $this->assertEquals([1, 2, 3], $rows->pluck('id')->all());
+    }
+
+    public function testWithMaterializedExpressionPostgres()
+    {
+        $builder = $this->getBuilder('Postgres');
+        $builder->select('u.id')
+                ->from('u')
+                ->withMaterializedExpression('u', $this->getBuilder('Postgres')->from('users'));
+
+        $expected = 'with "u" as materialized (select * from "users") select "u"."id" from "u"';
+        $this->assertEquals($expected, $builder->toSql());
+    }
+
+    public function testWithMaterializedExpressionSQLite()
+    {
+        $builder = $this->getBuilder('SQLite');
+        $builder->select('u.id')
+                ->from('u')
+                ->withMaterializedExpression('u', $this->getBuilder('SQLite')->from('users'));
+
+        $expected = 'with "u" as materialized (select * from "users") select "u"."id" from "u"';
+        $this->assertEquals($expected, $builder->toSql());
+    }
+
+    public function testWithNonMaterializedExpression()
+    {
+	    // TODO: 3.35.0+
+        if (DB::connection()->getDriverName() !== 'pgsql') {
+            $this->markTestSkipped();
+        }
+
+        $rows = DB::table('u')
+                  ->select('u.id')
+                  ->withNonMaterializedExpression('u', DB::table('users'))
+                  ->get();
+
+        $this->assertEquals([1, 2, 3], $rows->pluck('id')->all());
+    }
+
+    public function testWithNonMaterializedExpressionPostgres()
+    {
+        $builder = $this->getBuilder('Postgres');
+        $builder->select('u.id')
+                ->from('u')
+                ->withNonMaterializedExpression('u', $this->getBuilder('Postgres')->from('users'));
+
+        $expected = 'with "u" as not materialized (select * from "users") select "u"."id" from "u"';
+        $this->assertEquals($expected, $builder->toSql());
+    }
+
+    public function testWithNonMaterializedExpressionSQLite()
+    {
+        $builder = $this->getBuilder('SQLite');
+        $builder->select('u.id')
+                ->from('u')
+                ->withNonMaterializedExpression('u', $this->getBuilder('SQLite')->from('users'));
+
+        $expected = 'with "u" as not materialized (select * from "users") select "u"."id" from "u"';
+        $this->assertEquals($expected, $builder->toSql());
+    }
+
     public function testRecursionLimit()
     {
         $builder = $this->getBuilder('SqlServer');

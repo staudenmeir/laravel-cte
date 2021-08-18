@@ -77,13 +77,14 @@ class Builder extends Base
      * @param \Closure|\Illuminate\Database\Query\Builder|string $query
      * @param array|null $columns
      * @param bool $recursive
+     * @param bool|null $materialized
      * @return $this
      */
-    public function withExpression($name, $query, array $columns = null, $recursive = false)
+    public function withExpression($name, $query, array $columns = null, $recursive = false, $materialized = null)
     {
         [$query, $bindings] = $this->createSub($query);
 
-        $this->expressions[] = compact('name', 'query', 'columns', 'recursive');
+        $this->expressions[] = compact('name', 'query', 'columns', 'recursive', 'materialized');
 
         $this->addBinding($bindings, 'expressions');
 
@@ -101,6 +102,32 @@ class Builder extends Base
     public function withRecursiveExpression($name, $query, $columns = null)
     {
         return $this->withExpression($name, $query, $columns, true);
+    }
+
+    /**
+     * Add a materialized common table expression to the query.
+     *
+     * @param string $name
+     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
+     * @param array|null $columns
+     * @return $this
+     */
+    public function withMaterializedExpression($name, $query, $columns = null)
+    {
+        return $this->withExpression($name, $query, $columns, false, true);
+    }
+
+    /**
+     * Add a non-materialized common table expression to the query.
+     *
+     * @param string $name
+     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
+     * @param array|null $columns
+     * @return $this
+     */
+    public function withNonMaterializedExpression($name, $query, $columns = null)
+    {
+        return $this->withExpression($name, $query, $columns, false, false);
     }
 
     /**

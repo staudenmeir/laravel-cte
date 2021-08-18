@@ -36,7 +36,11 @@ trait CompilesExpressions
         foreach ($query->expressions as $expression) {
             $columns = $expression['columns'] ? '('.$this->columnize($expression['columns']).') ' : '';
 
-            $statements[] = $this->wrapTable($expression['name']).' '.$columns.'as ('.$expression['query'].')';
+            $materialized = !is_null($expression['materialized'])
+                ? ($expression['materialized'] ? 'materialized ' : 'not materialized ')
+                : '';
+
+            $statements[] = $this->wrapTable($expression['name']).' '.$columns.'as '.$materialized.'('.$expression['query'].')';
         }
 
         return 'with '.$recursive.implode(', ', $statements);

@@ -25,6 +25,9 @@ Supports Laravel 5.5+.
 ## Usage
 
 - [SELECT Queries](#select-queries)
+  - [Recursive Expressions](#recursive-expressions)
+  - [Materialized Expressions](#materialized-expressions)
+  - [Custom Columns](#custom-columns)
 - [INSERT/UPDATE/DELETE Queries](#insertupdatedelete-queries)
 - [Eloquent](#eloquent)
   - [Recursive Relationships](#recursive-relationships)
@@ -45,6 +48,8 @@ $posts = DB::table('p')
     ->get();
 ```
 
+#### Recursive Expressions
+
 Use `withRecursiveExpression()` for recursive expressions:
 
 ```php
@@ -60,6 +65,23 @@ $tree = DB::table('tree')
     ->withRecursiveExpression('tree', $query)
     ->get();
 ```
+
+#### Materialized Expressions
+
+Use `withMaterializedExpression()`/`withNonMaterializedExpression()` for (non-)materialized expressions (PostgreSQL, SQLite):
+
+```php
+$posts = DB::table('p')
+    ->select('p.*', 'u.name')
+    ->withMaterializedExpression('p', DB::table('posts'))
+    ->withNonMaterializedExpression('u', function ($query) {
+        $query->from('users');
+    })
+    ->join('u', 'u.id', '=', 'p.user_id')
+    ->get();
+```
+
+# Custom Columns
 
 You can provide the expression's columns as the third argument:
 
