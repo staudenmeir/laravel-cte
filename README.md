@@ -81,7 +81,7 @@ $posts = DB::table('p')
     ->get();
 ```
 
-# Custom Columns
+#### Custom Columns
 
 You can provide the expression's columns as the third argument:
 
