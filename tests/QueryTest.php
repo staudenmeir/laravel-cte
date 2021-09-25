@@ -185,6 +185,43 @@ class QueryTest extends TestCase
         $this->assertEquals('select * from [users] option (maxrecursion 100)', $builder->toSql());
     }
 
+    public function testOuterUnion()
+    {
+        $rows = DB::table('u')
+                   ->where('id', 1)
+                   ->unionAll(
+                       DB::table('u')
+                         ->where('id', 2)
+                   )
+                   ->withExpression('u', DB::table('users'))
+                   ->get();
+
+        $this->assertEquals([1, 2], $rows->pluck('id')->all());
+    }
+
+    public function testOuterUnionWithRecursionLimit()
+    {
+        $builder = $this->getBuilder('SqlServer');
+        $builder->from('users')->recursionLimit(100);
+
+        $builder = $this->getBuilder('SqlServer')
+                        ->from('u')
+                        ->where('id', 1)
+                        ->unionAll(
+                            $this->getBuilder('SqlServer')
+                                 ->from('u')
+                                 ->where('id', 2)
+                        )
+                        ->withExpression('u', $this->getBuilder('SqlServer')->from('users'))
+                        ->recursionLimit(100);
+
+        $expected = <<<EOT
+with [u] as (select * from [users]) select * from (select * from [u] where [id] = ?) as [temp_table] union all select * from (select * from [u] where [id] = ?) as [temp_table] option (maxrecursion 100)
+EOT;
+
+        $this->assertEquals($expected, $builder->toSql());
+    }
+
     public function testInsertUsing()
     {
         DB::table('posts')
@@ -246,7 +283,7 @@ class QueryTest extends TestCase
         $grammar = 'Staudenmeir\LaravelCte\Query\Grammars\\'.$database.'Grammar';
         $processor = $this->createMock(Processor::class);
 
-        return new Builder($connection, new $grammar, $processor);
+        return new Builder($connection, new $grammar(), $processor);
     }
 
     protected function getPackageProviders($app)

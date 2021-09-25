@@ -21,19 +21,20 @@ trait CompilesExpressions
      * Compile the common table expressions.
      *
      * @param \Illuminate\Database\Query\Builder $query
+     * @param array $expressions
      * @return string
      */
-    public function compileExpressions(Builder $query)
+    public function compileExpressions(Builder $query, array $expressions)
     {
-        if (!$query->expressions) {
+        if (!$expressions) {
             return '';
         }
 
-        $recursive = $this->recursiveKeyword($query->expressions);
+        $recursive = $this->recursiveKeyword($expressions);
 
         $statements = [];
 
-        foreach ($query->expressions as $expression) {
+        foreach ($expressions as $expression) {
             $columns = $expression['columns'] ? '('.$this->columnize($expression['columns']).') ' : '';
 
             $statements[] = $this->wrapTable($expression['name']).' '.$columns.'as ('.$expression['query'].')';
@@ -57,15 +58,37 @@ trait CompilesExpressions
      * Compile the recursion limit.
      *
      * @param \Illuminate\Database\Query\Builder $query
+     * @param int|null $recursionLimit
      * @return string
      */
-    public function compileRecursionLimit(Builder $query)
+    public function compileRecursionLimit(Builder $query, $recursionLimit)
     {
-        if (is_null($query->recursionLimit)) {
+        if (is_null($recursionLimit)) {
             return '';
         }
 
-        return 'option (maxrecursion '.(int) $query->recursionLimit.')';
+        return 'option (maxrecursion '.(int) $recursionLimit.')';
+    }
+
+    /**
+     * Compile a select query into SQL.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return string
+     */
+    public function compileSelect(Builder $query)
+    {
+        $sql = parent::compileSelect($query);
+
+        if ($query->unionExpressions) {
+            $sql = $this->compileExpressions($query, $query->unionExpressions) . " $sql";
+        }
+
+        if (!is_null($query->unionRecursionLimit)) {
+            $sql .= ' ' . $this->compileRecursionLimit($query, $query->unionRecursionLimit);
+        }
+
+        return $sql;
     }
 
     /**
@@ -78,9 +101,9 @@ trait CompilesExpressions
      */
     public function compileInsertUsing(Builder $query, array $columns, string $sql)
     {
-        $expressions = $this->compileExpressions($query);
+        $expressions = $this->compileExpressions($query, $query->expressions);
 
-        $recursionLimit = $this->compileRecursionLimit($query);
+        $recursionLimit = $this->compileRecursionLimit($query, $query->recursionLimit);
 
         $compiled = parent::compileInsertUsing($query, $columns, $sql);
 
@@ -102,7 +125,7 @@ trait CompilesExpressions
         $compiled = parent::compileUpdate($query, $values);
 
         return (string) Str::of($compiled)
-            ->prepend($this->compileExpressions($query), ' ')
+            ->prepend($this->compileExpressions($query, $query->expressions), ' ')
             ->trim();
     }
 
@@ -133,7 +156,7 @@ trait CompilesExpressions
         $compiled = parent::compileDelete($query);
 
         return (string) Str::of($compiled)
-            ->prepend($this->compileExpressions($query), ' ')
+            ->prepend($this->compileExpressions($query, $query->expressions), ' ')
             ->trim();
     }
 }
