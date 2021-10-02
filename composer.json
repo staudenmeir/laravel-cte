@@ -14,7 +14,8 @@
     },
     "require-dev": {
         "laravel/homestead": "^10.0",
-        "orchestra/testbench": "^5.0"
+        "orchestra/testbench": "^5.0",
+        "scrutinizer/ocular": "^1.8"
     },
     "autoload": {
         "psr-4": {
