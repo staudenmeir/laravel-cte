@@ -21,6 +21,6 @@ class MySqlGrammar extends Base
     {
         $insert = "insert into {$this->wrapTable($query->from)} ({$this->columnize($columns)}) ";
 
-        return $insert.$this->compileExpressions($query).' '.$sql;
+        return $insert.$this->compileExpressions($query, $query->expressions).' '.$sql;
     }
 }

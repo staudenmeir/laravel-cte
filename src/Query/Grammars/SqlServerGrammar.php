@@ -7,7 +7,9 @@ use Illuminate\Database\Query\Grammars\SqlServerGrammar as Base;
 
 class SqlServerGrammar extends Base
 {
-    use CompilesExpressions;
+    use CompilesExpressions {
+        compileSelect as compileSelectParent;
+    }
 
     /**
      * Compile a select query into SQL.
@@ -18,7 +20,7 @@ class SqlServerGrammar extends Base
     public function compileSelect(Builder $query)
     {
         if (!$query->offset) {
-            return parent::compileSelect($query);
+            return $this->compileSelectParent($query);
         }
 
         if (is_null($query->columns)) {
@@ -45,7 +47,7 @@ class SqlServerGrammar extends Base
      */
     protected function compileTableExpression($sql, $query)
     {
-        return $this->compileExpressions($query).' '.parent::compileTableExpression($sql, $query);
+        return $this->compileExpressions($query, $query->expressions).' '.parent::compileTableExpression($sql, $query);
     }
 
     /**

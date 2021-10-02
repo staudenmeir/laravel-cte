@@ -22,11 +22,25 @@ class Builder extends Base
     public $expressions = [];
 
     /**
+     * The common table expressions for union queries.
+     *
+     * @var array
+     */
+    public $unionExpressions = [];
+
+    /**
      * The recursion limit.
      *
      * @var int
      */
     public $recursionLimit;
+
+    /**
+     * The recursion limit for union queries.
+     *
+     * @var int
+     */
+    public $unionRecursionLimit;
 
     /**
      * Create a new query builder instance.
@@ -84,7 +98,7 @@ class Builder extends Base
     {
         [$query, $bindings] = $this->createSub($query);
 
-        $this->expressions[] = compact('name', 'query', 'columns', 'recursive', 'materialized');
+        $this->{$this->unions ? 'unionExpressions' : 'expressions'}[] = compact('name', 'query', 'columns', 'recursive', 'materialized');
 
         $this->addBinding($bindings, 'expressions');
 
@@ -138,7 +152,7 @@ class Builder extends Base
      */
     public function recursionLimit($value)
     {
-        $this->recursionLimit = $value;
+        $this->{$this->unions ? 'unionRecursionLimit' : 'recursionLimit'} = $value;
 
         return $this;
     }
