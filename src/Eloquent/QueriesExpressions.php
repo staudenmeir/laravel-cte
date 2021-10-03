@@ -9,7 +9,7 @@ trait QueriesExpressions
     /**
      * Get a new query builder instance for the connection.
      *
-     * @return Builder
+     * @return \Staudenmeir\LaravelCte\Query\Builder
      */
     protected function newBaseQueryBuilder()
     {
