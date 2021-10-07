@@ -4,6 +4,7 @@ namespace Staudenmeir\LaravelCte\Query\Grammars;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
+use Staudenmeir\LaravelCte\Query\Builder as CteBuilder;
 
 trait CompilesExpressions
 {
@@ -84,12 +85,14 @@ trait CompilesExpressions
     {
         $sql = parent::compileSelect($query);
 
-        if ($query->unionExpressions) {
-            $sql = $this->compileExpressions($query, $query->unionExpressions) . " $sql";
-        }
+        if ($query instanceof CteBuilder) {
+            if ($query->unionExpressions) {
+                $sql = $this->compileExpressions($query, $query->unionExpressions) . " $sql";
+            }
 
-        if (!is_null($query->unionRecursionLimit)) {
-            $sql .= ' ' . $this->compileRecursionLimit($query, $query->unionRecursionLimit);
+            if (!is_null($query->unionRecursionLimit)) {
+                $sql .= ' ' . $this->compileRecursionLimit($query, $query->unionRecursionLimit);
+            }
         }
 
         return $sql;
