@@ -22,6 +22,10 @@ Supports Laravel 5.5+.
 
     composer require staudenmeir/laravel-cte:"^1.0"
 
+Use this command if you are in PowerShell on Windows (e.g. in VS Code):
+
+    composer require staudenmeir/laravel-cte:"^^^^1.0"
+
 ## Usage
 
 - [SELECT Queries](#select-queries)
