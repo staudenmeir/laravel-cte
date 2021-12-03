@@ -175,4 +175,21 @@ class Builder extends Base
             $this->cleanBindings($bindings)
         );
     }
+
+    /**
+     * Update records in the database.
+     *
+     * @param  array  $values
+     * @return int
+     */
+    public function update(array $values)
+    {
+        $this->applyBeforeQueryCallbacks();
+
+        $sql = $this->grammar->compileUpdate($this, $values);
+
+        return $this->connection->update($sql, $this->cleanBindings(
+            $this->grammar->getBindingsForUpdate($this, $this->bindings, $values)
+        ));
+    }
 }

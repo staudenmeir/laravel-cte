@@ -153,6 +153,19 @@ trait CompilesExpressions
     }
 
     /**
+     * Get the bindings for an update statement.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array $bindings
+     * @param array $values
+     * @return array
+     */
+    public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
+    {
+        return $this->prepareBindingsForUpdate($bindings, $values);
+    }
+
+    /**
      * Compile a delete statement into SQL.
      *
      * @param \Illuminate\Database\Query\Builder $query

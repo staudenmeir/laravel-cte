@@ -321,11 +321,41 @@ EOT;
         DB::table('posts')
             ->withExpression('u', DB::table('users')->where('id', '>', 1))
             ->update([
-                'user_id' => DB::raw('(select min(id) from u)'),
+                'views' => DB::raw('(select count(*) from u)'),
                 'updated_at' => new DateTime(),
             ]);
 
-        $this->assertEquals([2, 2], DB::table('posts')->pluck('user_id')->all());
+        $this->assertEquals([2, 2], DB::table('posts')->orderBy('id')->pluck('views')->all());
+    }
+
+    public function testUpdateWithJoin()
+    {
+        DB::table('posts')
+            ->withExpression('u', DB::table('users')->where('id', '>', 1))
+            ->join('u', 'u.id', '=', 'posts.user_id')
+            ->update([
+                'views' => 1
+            ]);
+
+        $this->assertEquals([0, 1], DB::table('posts')->orderBy('id')->pluck('views')->all());
+    }
+
+    public function testUpdateWithLimit()
+    {
+        if (DB::connection()->getDriverName() === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
+        DB::table('posts')
+            ->withExpression('u', DB::table('users')->where('id', '>', 0))
+            ->whereIn('user_id', DB::table('u')->select('id'))
+            ->orderBy('id')
+            ->limit(1)
+            ->update([
+                'views' => 1,
+            ]);
+
+        $this->assertEquals([1, 0], DB::table('posts')->orderBy('id')->pluck('views')->all());
     }
 
     public function testDelete()
@@ -336,6 +366,33 @@ EOT;
             ->delete();
 
         $this->assertEquals([1], DB::table('posts')->pluck('user_id')->all());
+    }
+
+    public function testDeleteWithJoin()
+    {
+        DB::table('posts')
+            ->withExpression('u', DB::table('users')->where('id', '>', 1))
+            ->join('users', 'users.id', '=', 'posts.user_id')
+            ->whereIn('user_id', DB::table('u')->select('id'))
+            ->delete();
+
+        $this->assertEquals([1], DB::table('posts')->pluck('user_id')->all());
+    }
+
+    public function testDeleteWithLimit()
+    {
+        if (DB::connection()->getDriverName() === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
+        DB::table('posts')
+            ->withExpression('u', DB::table('users')->where('id', '>', 0))
+            ->whereIn('user_id', DB::table('u')->select('id'))
+            ->orderBy('id')
+            ->limit(1)
+            ->delete();
+
+        $this->assertEquals([2], DB::table('posts')->pluck('user_id')->all());
     }
 
     public function testOffsetSqlServer()

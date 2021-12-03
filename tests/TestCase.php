@@ -26,6 +26,7 @@ abstract class TestCase extends Base
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('views')->default(0);
             $table->timestamps();
         });
 
