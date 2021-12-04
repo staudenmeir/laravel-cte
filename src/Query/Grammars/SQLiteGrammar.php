@@ -23,12 +23,12 @@ class SQLiteGrammar extends Base
     {
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 9);
 
-        if (($backtrace[6]['class'] === CteBuilder::class && $backtrace[6]['function'] === 'withExpression')
-            || ($backtrace[7]['class'] === CteBuilder::class && $backtrace[7]['function'] === 'withExpression')
-            || ($backtrace[8]['class'] === CteBuilder::class && $backtrace[8]['function'] === 'withExpression')) {
-            $conjunction = $union['all'] ? ' union all ' : ' union ';
+        for ($i = 6; $i <= 8; $i++) {
+            if (($backtrace[$i]['class'] === CteBuilder::class && $backtrace[$i]['function'] === 'withExpression')) {
+                $conjunction = $union['all'] ? ' union all ' : ' union ';
 
-            return $conjunction.$union['query']->toSql();
+                return $conjunction.$union['query']->toSql();
+            }
         }
 
         return parent::compileUnion($union);
