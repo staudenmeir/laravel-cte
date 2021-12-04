@@ -12,7 +12,7 @@ jobs:
         database: [mysql, pgsql, sqlite, sqlsrv]
         release: [stable, lowest]
         include:
-          - php: 8.0
+          - php: 8.1
             release: stable
             coverage: xdebug
 
@@ -57,10 +57,6 @@ jobs:
           tools: pecl
           extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_${{ matrix.database }}, tokenizer, xml
           coverage: ${{ matrix.coverage }}
-      - run: |
-          mysql -h 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -u root -ppassword -e "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password'"
-          mysql -h 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -u root -ppassword -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'"
-        if: matrix.database == 'mysql' && matrix.php < 7.4
       - run: docker exec sqlsrv /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -P Password! -Q "create database [test]"
         if: matrix.database == 'sqlsrv'
       - run: composer update --no-interaction --no-progress --no-suggest --prefer-dist --prefer-${{ matrix.release }}
