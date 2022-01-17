@@ -166,6 +166,8 @@ class Builder extends Base
      */
     public function insertUsing(array $columns, $query)
     {
+	    $this->applyBeforeQueryCallbacks();
+
         [$sql, $bindings] = $this->createSub($query);
 
         $bindings = array_merge($this->bindings['expressions'], $bindings);
