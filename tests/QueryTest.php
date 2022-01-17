@@ -309,7 +309,7 @@ EOT;
     {
         $builder = $this->getBuilder('SqlServer');
         $query = 'insert into [posts] ([id]) select [id] from [users] option (maxrecursion 100)';
-        $builder->getConnection()->expects($this->once())->method('insert')->with($query, []);
+        $builder->getConnection()->expects($this->once())->method('affectingStatement')->with($query, []);
 
         $builder->from('posts')
             ->recursionLimit(100)
