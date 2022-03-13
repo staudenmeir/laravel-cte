@@ -177,6 +177,29 @@ class QueryTest extends TestCase
         $this->assertEquals([3], $builder->getRawBindings()['expressions']);
     }
 
+    public function testWithRecursiveExpressionAndCycleDetection()
+    {
+        if (!in_array($this->database, ['mariadb', 'pgsql'])) {
+            $this->markTestSkipped();
+        }
+
+        $query = 'select 1, 1 union all select number + 1, (number + 1) % 5 from numbers';
+
+        $rows = DB::table('numbers')
+                  ->withRecursiveExpressionAndCycleDetection('numbers', $query, 'modulo', 'is_cycle', 'path', ['number', 'modulo'])
+                  ->get();
+
+        if ($this->database === 'mariadb') {
+            $this->assertEquals([1, 2, 3, 4, 5], $rows->pluck('number')->all());
+        }
+
+        if ($this->database === 'pgsql') {
+            $this->assertEquals([1, 2, 3, 4, 5, 6], $rows->pluck('number')->all());
+            $this->assertSame(false, $rows[0]->is_cycle);
+            $this->assertEquals('{(1)}', $rows[0]->path);
+        }
+    }
+
     public function testWithMaterializedExpression()
     {
         // TODO: SQLite 3.35.0+

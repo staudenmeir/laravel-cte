@@ -42,7 +42,9 @@ trait CompilesExpressions
                 ? ($expression['materialized'] ? 'materialized ' : 'not materialized ')
                 : '';
 
-            $statements[] = $this->wrapTable($expression['name']).' '.$columns.'as '.$materialized.'('.$expression['query'].')';
+            $cycle = $this->compileCycle($query, $expression);
+
+            $statements[] = $this->wrapTable($expression['name']).' '.$columns.'as '.$materialized.'('.$expression['query'].")$cycle";
         }
 
         return 'with '.$recursive.implode(', ', $statements);
@@ -73,6 +75,26 @@ trait CompilesExpressions
         }
 
         return 'option (maxrecursion '.(int) $recursionLimit.')';
+    }
+
+    /**
+     * Compile the cycle detection.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array $expression
+     * @return string
+     */
+    public function compileCycle(Builder $query, array $expression)
+    {
+        if (!$expression['cycle']) {
+            return '';
+        }
+
+        $columns = $this->columnize($expression['cycle']['columns']);
+        $markColumn = $this->wrap($expression['cycle']['markColumn']);
+        $pathColumn = $this->wrap($expression['cycle']['pathColumn']);
+
+        return " cycle $columns set $markColumn using $pathColumn";
     }
 
     /**

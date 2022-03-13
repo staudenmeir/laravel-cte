@@ -10,6 +10,24 @@ class MySqlGrammar extends Base
     use CompilesExpressions;
 
     /**
+     * Compile the cycle detection.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array $expression
+     * @return string
+     */
+    public function compileCycle(Builder $query, array $expression)
+    {
+        if (!$expression['cycle']) {
+            return '';
+        }
+
+        $columns = $this->columnize($expression['cycle']['columns']);
+
+        return " cycle $columns restrict";
+    }
+
+    /**
      * Compile an insert statement using a subquery into SQL.
      *
      * @param \Illuminate\Database\Query\Builder $query

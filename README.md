@@ -6,6 +6,7 @@
 [![License](https://poser.pugx.org/staudenmeir/laravel-cte/license)](https://packagist.org/packages/staudenmeir/laravel-cte)
 
 ## Introduction
+
 This Laravel extension adds support for common table expressions (CTE) to the query builder and Eloquent.
 
 Supports Laravel 5.5+.
@@ -17,7 +18,7 @@ Supports Laravel 5.5+.
 - PostgreSQL 9.4+
 - SQLite 3.8.3+
 - SQL Server 2008+
- 
+
 ## Installation
 
     composer require staudenmeir/laravel-cte:"^1.0"
@@ -29,12 +30,13 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 ## Usage
 
 - [SELECT Queries](#select-queries)
-  - [Recursive Expressions](#recursive-expressions)
-  - [Materialized Expressions](#materialized-expressions)
-  - [Custom Columns](#custom-columns)
+    - [Recursive Expressions](#recursive-expressions)
+    - [Materialized Expressions](#materialized-expressions)
+    - [Custom Columns](#custom-columns)
+    - [Cycle Detection](#cycle-detection)
 - [INSERT/UPDATE/DELETE Queries](#insertupdatedelete-queries)
 - [Eloquent](#eloquent)
-  - [Recursive Relationships](#recursive-relationships)
+    - [Recursive Relationships](#recursive-relationships)
 - [Lumen](#lumen)
 
 ### SELECT Queries
@@ -72,7 +74,8 @@ $tree = DB::table('tree')
 
 #### Materialized Expressions
 
-Use `withMaterializedExpression()`/`withNonMaterializedExpression()` for (non-)materialized expressions (PostgreSQL, SQLite):
+Use `withMaterializedExpression()`/`withNonMaterializedExpression()` for (non-)materialized expressions (PostgreSQL,
+SQLite):
 
 ```php
 $posts = DB::table('p')
@@ -94,6 +97,36 @@ $query = 'select 1 union all select number + 1 from numbers where number < 10';
 
 $numbers = DB::table('numbers')
     ->withRecursiveExpression('numbers', $query, ['number'])
+    ->get();
+```
+
+#### Cycle Detection
+
+[MariaDB 10.5.2+](https://mariadb.com/kb/en/with/#cycle-restrict)
+and [PostgreSQL 14+](https://www.postgresql.org/docs/current/queries-with.html#QUERIES-WITH-CYCLE) support native cycle
+detection to prevent infinite loops in recursive expressions. Provide the column(s) that indicate(s) a cycle as the
+third argument to `withRecursiveExpressionAndCycleDetection()`:
+
+```php
+$query = DB::table('users')
+    ->whereNull('parent_id')
+    ->unionAll(
+        DB::table('users')
+            ->select('users.*')
+            ->join('tree', 'tree.id', '=', 'users.parent_id')
+    );
+
+$tree = DB::table('tree')
+    ->withRecursiveExpressionAndCycleDetection('tree', $query, 'id')
+    ->get();
+```
+
+On PostgreSQL, you can customize the name of the column that shows whether a cycle has been detected and the name of the
+column that tracks the path:
+
+```php
+$tree = DB::table('tree')
+    ->withRecursiveExpressionAndCycleDetection('tree', $query, 'id', 'is_cycle', 'path')
     ->get();
 ```
 
@@ -146,7 +179,8 @@ $tree = User::from('tree')
 
 #### Recursive Relationships
 
-If you want to implement recursive relationships, you can use this package: [staudenmeir/laravel-adjacency-list](https://github.com/staudenmeir/laravel-adjacency-list)
+If you want to implement recursive relationships, you can use this
+package: [staudenmeir/laravel-adjacency-list](https://github.com/staudenmeir/laravel-adjacency-list)
 
 ### Lumen
 

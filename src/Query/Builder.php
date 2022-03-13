@@ -92,13 +92,14 @@ class Builder extends Base
      * @param array|null $columns
      * @param bool $recursive
      * @param bool|null $materialized
+     * @param array|null $cycle
      * @return $this
      */
-    public function withExpression($name, $query, array $columns = null, $recursive = false, $materialized = null)
+    public function withExpression($name, $query, array $columns = null, $recursive = false, $materialized = null, array $cycle = null)
     {
         [$query, $bindings] = $this->createSub($query);
 
-        $this->{$this->unions ? 'unionExpressions' : 'expressions'}[] = compact('name', 'query', 'columns', 'recursive', 'materialized');
+        $this->{$this->unions ? 'unionExpressions' : 'expressions'}[] = compact('name', 'query', 'columns', 'recursive', 'materialized', 'cycle');
 
         $this->addBinding($bindings, 'expressions');
 
@@ -111,11 +112,34 @@ class Builder extends Base
      * @param string $name
      * @param \Closure|\Illuminate\Database\Query\Builder|string $query
      * @param array|null $columns
+     * @param array|null $cycle
      * @return $this
      */
-    public function withRecursiveExpression($name, $query, $columns = null)
+    public function withRecursiveExpression($name, $query, $columns = null, array $cycle = null)
     {
-        return $this->withExpression($name, $query, $columns, true);
+        return $this->withExpression($name, $query, $columns, true, null, $cycle);
+    }
+
+    /**
+     * Add a recursive common table expression with cycle detection to the query.
+     *
+     * @param string $name
+     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
+     * @param array|string $cycleColumns
+     * @param string $markColumn
+     * @param string $pathColumn
+     * @param array|null $columns
+     * @return $this
+     */
+    public function withRecursiveExpressionAndCycleDetection($name, $query, $cycleColumns, $markColumn = 'is_cycle', $pathColumn = 'path', $columns = null)
+    {
+        $cycleColumns = (array) $cycleColumns;
+
+        $cycle = [
+            'columns' => $cycleColumns
+        ] + compact('markColumn', 'pathColumn');
+
+        return $this->withRecursiveExpression($name, $query, $columns, $cycle);
     }
 
     /**
@@ -166,7 +190,7 @@ class Builder extends Base
      */
     public function insertUsing(array $columns, $query)
     {
-	    $this->applyBeforeQueryCallbacks();
+        $this->applyBeforeQueryCallbacks();
 
         [$sql, $bindings] = $this->createSub($query);
 
