@@ -179,8 +179,8 @@ class QueryTest extends TestCase
 
     public function testWithMaterializedExpression()
     {
-        // TODO: 3.35.0+
-        if (DB::connection()->getDriverName() !== 'pgsql') {
+        // TODO: SQLite 3.35.0+
+        if ($this->database !== 'pgsql') {
             $this->markTestSkipped();
         }
 
@@ -216,8 +216,8 @@ class QueryTest extends TestCase
 
     public function testWithNonMaterializedExpression()
     {
-        // TODO: 3.35.0+
-        if (DB::connection()->getDriverName() !== 'pgsql') {
+        // TODO SQLite 3.35.0+
+        if ($this->database !== 'pgsql') {
             $this->markTestSkipped();
         }
 
@@ -318,6 +318,10 @@ EOT;
 
     public function testUpdate()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         DB::table('posts')
             ->withExpression('u', DB::table('users')->where('id', '>', 1))
             ->update([
@@ -330,6 +334,10 @@ EOT;
 
     public function testUpdateWithJoin()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         DB::table('posts')
             ->withExpression('u', DB::table('users')->where('id', '>', 1))
             ->join('u', 'u.id', '=', 'posts.user_id')
@@ -342,7 +350,7 @@ EOT;
 
     public function testUpdateWithLimit()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -360,6 +368,10 @@ EOT;
 
     public function testDelete()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         DB::table('posts')
             ->withExpression('u', DB::table('users')->where('id', '>', 1))
             ->whereIn('user_id', DB::table('u')->select('id'))
@@ -370,6 +382,10 @@ EOT;
 
     public function testDeleteWithJoin()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         DB::table('posts')
             ->withExpression('u', DB::table('users')->where('id', '>', 1))
             ->join('users', 'users.id', '=', 'posts.user_id')
@@ -381,7 +397,7 @@ EOT;
 
     public function testDeleteWithLimit()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 

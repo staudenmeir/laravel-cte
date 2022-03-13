@@ -11,8 +11,12 @@ use Tests\Models\User;
 
 abstract class TestCase extends Base
 {
+    protected string $database;
+
     protected function setUp(): void
     {
+        $this->database = getenv('DATABASE') ?: 'sqlite';
+
         parent::setUp();
 
         Schema::dropAllTables();
@@ -48,6 +52,6 @@ abstract class TestCase extends Base
 
         $app['config']->set('database.default', 'testing');
 
-        $app['config']->set('database.connections.testing', $config[getenv('DATABASE') ?: 'sqlite']);
+        $app['config']->set('database.connections.testing', $config[$this->database]);
     }
 }
