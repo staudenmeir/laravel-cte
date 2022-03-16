@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Staudenmeir\LaravelCte\Tests;
 
 use DateTime;
 use Illuminate\Database\Connection;

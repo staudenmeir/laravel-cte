@@ -22,7 +22,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Staudenmeir\\LaravelCte\\Tests\\": "tests/"
         }
     },
     "extra": {
@@ -33,5 +33,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable" : true
+    "prefer-stable": true
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests;
+namespace Staudenmeir\LaravelCte\Tests;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Base;
-use Tests\Models\Post;
-use Tests\Models\User;
+use Staudenmeir\LaravelCte\Tests\Models\Post;
+use Staudenmeir\LaravelCte\Tests\Models\User;
 
 abstract class TestCase extends Base
 {
