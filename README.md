@@ -37,6 +37,7 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 - [INSERT/UPDATE/DELETE Queries](#insertupdatedelete-queries)
 - [Eloquent](#eloquent)
     - [Recursive Relationships](#recursive-relationships)
+- [Package Conflicts](#package-conflicts)
 - [Lumen](#lumen)
 
 ### SELECT Queries
