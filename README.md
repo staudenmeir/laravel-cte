@@ -182,6 +182,12 @@ $tree = User::from('tree')
 If you want to implement recursive relationships, you can use this
 package: [staudenmeir/laravel-adjacency-list](https://github.com/staudenmeir/laravel-adjacency-list)
 
+### Package Conflicts
+
+- `staudenmeir/eloquent-eager-limit`: Replace both packages
+  with [staudenmeir/eloquent-eager-limit-x-laravel-cte](https://github.com/staudenmeir/eloquent-eager-limit-x-laravel-cte)
+  to use them on the same model.
+
 ### Lumen
 
 If you are using Lumen, you have to instantiate the query builder manually:
