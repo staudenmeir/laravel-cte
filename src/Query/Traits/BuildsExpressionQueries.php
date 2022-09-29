@@ -5,6 +5,7 @@ namespace Staudenmeir\LaravelCte\Query\Traits;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Database\Query\Processors\Processor;
+use MStaack\LaravelPostgis\Schema\Grammars\PostgisGrammar;
 use RuntimeException;
 use Staudenmeir\LaravelCte\Query\Grammars\MySqlGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\PostgresGrammar;
@@ -63,7 +64,7 @@ trait BuildsExpressionQueries
      * Get the query grammar.
      *
      * @param \Illuminate\Database\Connection $connection
-     * @return \Illuminate\Database\Query\Grammars\Grammar
+     * @return Grammar|PostgisGrammar
      */
     protected function getQueryGrammar(Connection $connection)
     {
@@ -73,7 +74,7 @@ trait BuildsExpressionQueries
             case 'mysql':
                 return new MySqlGrammar();
             case 'pgsql':
-                return new PostgresGrammar();
+                return new PostgisGrammar();
             case 'sqlite':
                 return new SQLiteGrammar();
             case 'sqlsrv':
