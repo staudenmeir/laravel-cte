@@ -20,6 +20,7 @@ abstract class TestCase extends Base
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('followers');
             $table->timestamps();
         });
 
@@ -32,9 +33,9 @@ abstract class TestCase extends Base
 
         Model::unguard();
 
-        User::create(['parent_id' => null]);
-        User::create(['parent_id' => 1]);
-        User::create(['parent_id' => 2]);
+        User::create(['parent_id' => null, 'followers' => 10]);
+        User::create(['parent_id' => 1, 'followers' => 20]);
+        User::create(['parent_id' => 2, 'followers' => 30]);
 
         Post::create(['user_id' => 1]);
         Post::create(['user_id' => 2]);

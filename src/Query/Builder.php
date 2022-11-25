@@ -166,9 +166,9 @@ class Builder extends Base
      */
     public function insertUsing(array $columns, $query)
     {
-	    if (method_exists($this, 'applyBeforeQueryCallbacks')) {
-		    $this->applyBeforeQueryCallbacks();
-	    }
+        if (method_exists($this, 'applyBeforeQueryCallbacks')) {
+            $this->applyBeforeQueryCallbacks();
+        }
 
         [$sql, $bindings] = $this->createSub($query);
 
@@ -196,6 +196,23 @@ class Builder extends Base
 
         return $this->connection->update($sql, $this->cleanBindings(
             $this->grammar->getBindingsForUpdate($this, $this->bindings, $values)
+        ));
+    }
+
+    /**
+     * Update records in a PostgreSQL database using the update from syntax.
+     *
+     * @param array $values
+     * @return int
+     */
+    public function updateFrom(array $values)
+    {
+        $this->applyBeforeQueryCallbacks();
+
+        $sql = $this->grammar->compileUpdateFrom($this, $values);
+
+        return $this->connection->update($sql, $this->cleanBindings(
+            $this->grammar->prepareBindingsForUpdateFrom($this->bindings, $values)
         ));
     }
 }

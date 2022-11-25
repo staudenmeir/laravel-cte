@@ -358,6 +358,22 @@ EOT;
         $this->assertEquals([1, 0], DB::table('posts')->orderBy('id')->pluck('views')->all());
     }
 
+    public function testUpdateFrom()
+    {
+        if (DB::connection()->getDriverName() !== 'pgsql') {
+            $this->markTestSkipped();
+        }
+
+        DB::table('posts')
+          ->withExpression('u', DB::table('users')->where('id', '>', 1))
+          ->join('u', 'u.id', '=', 'posts.user_id')
+          ->updateFrom([
+              'views' => DB::raw('"u"."followers"'),
+          ]);
+
+        $this->assertEquals([0, 20], DB::table('posts')->orderBy('id')->pluck('views')->all());
+    }
+
     public function testDelete()
     {
         DB::table('posts')
