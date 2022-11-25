@@ -204,7 +204,7 @@ trait BuildsExpressionQueries
     /**
      * Update records in the database.
      *
-     * @param  array  $values
+     * @param array $values
      * @return int
      */
     public function update(array $values)
@@ -215,6 +215,23 @@ trait BuildsExpressionQueries
 
         return $this->connection->update($sql, $this->cleanBindings(
             $this->grammar->getBindingsForUpdate($this, $this->bindings, $values)
+        ));
+    }
+
+    /**
+     * Update records in a PostgreSQL database using the update from syntax.
+     *
+     * @param array $values
+     * @return int
+     */
+    public function updateFrom(array $values)
+    {
+        $this->applyBeforeQueryCallbacks();
+
+        $sql = $this->grammar->compileUpdateFrom($this, $values);
+
+        return $this->connection->update($sql, $this->cleanBindings(
+            $this->grammar->prepareBindingsForUpdateFrom($this->bindings, $values)
         ));
     }
 }
