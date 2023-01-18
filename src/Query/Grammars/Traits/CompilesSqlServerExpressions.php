@@ -18,23 +18,11 @@ trait CompilesSqlServerExpressions
      */
     public function compileSelect(Builder $query)
     {
-        if (!$query->offset) {
-            return $this->compileSelectParent($query);
+        if ($query->offset && empty($query->orders)) {
+            $query->orders[] = ['sql' => '(SELECT 0)'];
         }
 
-        if (is_null($query->columns)) {
-            $query->columns = ['*'];
-        }
-
-        $expressions = $query->expressions;
-
-        $query->expressions = [];
-
-        $components = $this->compileComponents($query);
-
-        $query->expressions = $expressions;
-
-        return $this->compileAnsiOffset($query, $components);
+        return $this->compileSelectParent($query);
     }
 
     /**

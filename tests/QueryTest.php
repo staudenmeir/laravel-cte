@@ -452,7 +452,7 @@ EOT;
 
     public function testOffsetSqlServer()
     {
-        $expected = 'with [p] as (select * from [posts]) select * from (select *, row_number() over (order by (select 0)) as row_num from [users] inner join [p] on [p].[user_id] = [users].[id]) as temp_table where row_num >= 6 order by row_num';
+        $expected = 'with [p] as (select * from [posts]) select * from [users] inner join [p] on [p].[user_id] = [users].[id] order by (SELECT 0) offset 5 rows';
 
         $query = $this->getBuilder('SqlServer')
             ->from('users')
