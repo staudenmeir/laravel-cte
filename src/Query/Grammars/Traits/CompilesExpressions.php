@@ -5,6 +5,7 @@ namespace Staudenmeir\LaravelCte\Query\Grammars\Traits;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelCte\Query\Builder as CteBuilder;
+use Staudenmeir\LaravelCte\Query\SingleStoreBuilder;
 
 trait CompilesExpressions
 {
@@ -106,8 +107,7 @@ trait CompilesExpressions
     public function compileSelect(Builder $query)
     {
         $sql = parent::compileSelect($query);
-
-        if ($query instanceof CteBuilder) {
+        if ($query instanceof CteBuilder or $query instanceof SingleStoreBuilder) {
             if ($query->unionExpressions) {
                 $sql = $this->compileExpressions($query, $query->unionExpressions) . " $sql";
             }

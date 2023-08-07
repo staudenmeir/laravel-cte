@@ -18,6 +18,7 @@ Supports Laravel 5.5+.
 - PostgreSQL 9.4+
 - SQLite 3.8.3+
 - SQL Server 2008+
+- SingleStore 8.1+
 
 ## Installation
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Query\Processors\Processor;
 use RuntimeException;
 use Staudenmeir\LaravelCte\Query\Grammars\MySqlGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\PostgresGrammar;
+use Staudenmeir\LaravelCte\Query\Grammars\SingleStoreGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\SQLiteGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\SqlServerGrammar;
 
@@ -74,6 +75,7 @@ trait BuildsExpressionQueries
             'pgsql' => new PostgresGrammar(),
             'sqlite' => new SQLiteGrammar(),
             'sqlsrv' => new SqlServerGrammar(),
+            'singlestore' => new SingleStoreGrammar(),
             default => throw new RuntimeException('This database is not supported.'), // @codeCoverageIgnore
         };
 

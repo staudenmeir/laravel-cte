@@ -15,7 +15,7 @@ class EloquentTest extends TestCase
         $users = User::withExpression('ids', 'select 1 union all select 2', ['id'])
             ->whereIn('id', function (Builder $query) {
                 $query->from('ids');
-            })->get();
+            })->orderBy('id')->get();
 
         $this->assertEquals([1, 2], $users->pluck('id')->all());
     }
@@ -30,9 +30,10 @@ class EloquentTest extends TestCase
 
         $users = User::from('ancestors')
             ->withRecursiveExpression('ancestors', $query)
+            ->orderBy('id')
             ->get();
 
-        $this->assertEquals([3, 2, 1], $users->pluck('id')->all());
+        $this->assertEquals([1, 2, 3], $users->pluck('id')->all());
     }
 
     public function testWithRecursiveExpressionAndCycleDetection()
@@ -78,10 +79,11 @@ class EloquentTest extends TestCase
 
     public function testInsertUsing()
     {
+
         Post::withExpression('u', User::select('id')->where('id', '>', 1))
           ->insertUsing(['user_id'], User::from('u'));
 
-        $this->assertEquals([1, 2, 2, 3], Post::pluck('user_id')->all());
+        $this->assertEquals([1, 2, 2, 3], Post::orderBy('user_id')->pluck('user_id')->all());
     }
 
     public function testUpdate()
@@ -116,7 +118,10 @@ class EloquentTest extends TestCase
 
     public function testUpdateWithLimit()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 
+        // SingleStore support update with limit only when it is constrained to a single partition
+        // https://docs.singlestore.com/cloud/reference/sql-reference/data-manipulation-language-dml/update/#update-using-limit
+        'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -164,11 +169,19 @@ class EloquentTest extends TestCase
             $this->markTestSkipped();
         }
 
-        Post::withExpression('u', User::where('id', '>', 0))
-          ->whereIn('user_id', User::from('u')->select('id'))
-          ->orderBy('id')
-          ->limit(1)
-          ->delete();
+        if ($this->database == 'singlestore') {
+            Post::withExpression('u', User::where('id', '<', 2))
+            ->whereIn('user_id', User::from('u')->select('id'))
+            ->limit(1)
+            ->delete();  
+
+        } else {
+            Post::withExpression('u', User::where('id', '>', 0))
+            ->whereIn('user_id', User::from('u')->select('id'))
+            ->orderBy('id')
+            ->limit(1)
+            ->delete();  
+        }
 
         $this->assertEquals([2], Post::pluck('user_id')->all());
     }
