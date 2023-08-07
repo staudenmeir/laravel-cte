@@ -30,7 +30,7 @@ class QueryTest extends TestCase
             ->withExpression('u', DB::table('users'))
             ->withExpression('p', $posts)
             ->join('p', 'p.user_id', '=', 'u.id')
-            ->orderBy('id')
+            ->orderBy('u.id')
             ->get();
 
         $this->assertEquals([1, 2], $rows->pluck('id')->all());
