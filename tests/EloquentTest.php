@@ -79,7 +79,6 @@ class EloquentTest extends TestCase
 
     public function testInsertUsing()
     {
-
         Post::withExpression('u', User::select('id')->where('id', '>', 1))
           ->insertUsing(['user_id'], User::from('u'));
 
@@ -173,14 +172,13 @@ class EloquentTest extends TestCase
             Post::withExpression('u', User::where('id', '<', 2))
             ->whereIn('user_id', User::from('u')->select('id'))
             ->limit(1)
-            ->delete();  
-
+            ->delete();
         } else {
             Post::withExpression('u', User::where('id', '>', 0))
             ->whereIn('user_id', User::from('u')->select('id'))
             ->orderBy('id')
             ->limit(1)
-            ->delete();  
+            ->delete();
         }
 
         $this->assertEquals([2], Post::pluck('user_id')->all());

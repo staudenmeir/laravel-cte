@@ -19,6 +19,7 @@ abstract class TestCase extends Base
         $this->database = getenv('DATABASE') ?: 'sqlite';
 
         parent::setUp();
+
         Schema::dropAllTables();
 
         Schema::create('users', function (Blueprint $table) {

@@ -22,7 +22,7 @@ class QueryTest extends TestCase
         if ($this->database == 'singlestore') {
             $posts = function (SingleStoreBuilder $query) {
                 $query->from('posts');
-            };    
+            };
         }
 
         $rows = DB::table('u')
@@ -500,11 +500,10 @@ EOT;
         $grammar = 'Staudenmeir\LaravelCte\Query\Grammars\\'.$database.'Grammar';
         $processor = $this->createMock(Processor::class);
 
-        if ($database == 'singlestore') {
-            return new SingleStoreBuilder($connection, new $grammar(), $processor);
-        } else {
-            return new Builder($connection, new $grammar(), $processor);
-        }
+        return match ($database) {
+            'singlestore' => new SingleStoreBuilder($connection, new $grammar(), $processor),
+            default => new Builder($connection, new $grammar(), $processor),
+        };
     }
 
     protected function getPackageProviders($app)

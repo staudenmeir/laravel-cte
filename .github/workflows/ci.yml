@@ -89,6 +89,7 @@ jobs:
       - run: docker exec sqlsrv /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -P Password! -Q "create database [test]"
         if: matrix.database == 'sqlsrv'
       - run: mysql -h 127.0.0.1 -u root -ptest -P ${{ job.services.singlestore.ports[3306] }} -e "create database test"
+        if: matrix.database == 'singlestore'
       - run: composer update --no-interaction --no-progress --prefer-dist --prefer-${{ matrix.release }}
       - run: cp tests/config/database.ci.php tests/config/database.php
       - run: |
