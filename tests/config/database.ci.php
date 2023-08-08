@@ -61,7 +61,7 @@ return [
         'driver' => 'singlestore',
         'host' => '127.0.0.1',
         'port' => getenv('SINGLESTORE_PORT'),
-        'database' => 'laravel_cte',
+        'database' => 'test',
         'username' => 'root',
         'password' => 'test',
         'charset' => 'utf8mb4',
