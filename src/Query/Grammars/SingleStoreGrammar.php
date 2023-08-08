@@ -2,7 +2,10 @@
 
 namespace Staudenmeir\LaravelCte\Query\Grammars;
 
-class SingleStoreGrammar extends MySqlGrammar
+use SingleStore\Laravel\Query\Grammar;
+use Staudenmeir\LaravelCte\Query\Grammars\Traits\CompilesMySqlExpressions;
+
+class SingleStoreGrammar extends Grammar
 {
-    //
+    use CompilesMySqlExpressions;
 }
