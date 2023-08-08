@@ -14,7 +14,6 @@
         "singlestoredb/singlestoredb-laravel": "^1.5.1"
     },
     "require-dev": {
-        "singlestoredb/singlestoredb-laravel": "^1.5.0",
         "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^10.0",
         "phpstan/phpstan": "^1.10"
