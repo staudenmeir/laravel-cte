@@ -11,7 +11,7 @@
     "require": {
         "php": "^8.1",
         "illuminate/database": "^10.0",
-        "singlestoredb/singlestoredb-laravel": "^1.5.0"
+        "singlestoredb/singlestoredb-laravel": "^1.5.1"
     },
     "require-dev": {
         "singlestoredb/singlestoredb-laravel": "^1.5.0",
