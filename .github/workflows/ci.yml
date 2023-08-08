@@ -65,7 +65,7 @@ jobs:
         # check for new versions at https://github.com/singlestore-labs/singlestoredb-dev-image/pkgs/container/singlestoredb-dev/versions
         image: ghcr.io/singlestore-labs/singlestoredb-dev:0.2.8
         ports:
-          - "3306:3306"
+          - 3306
         env:
           # this license key is only authorized for use in SingleStore laravel-cte tests and is heavily restricted
           # if you want a free SingleStore license for your own use please visit https://www.singlestore.com/cloud-trial/
@@ -99,5 +99,6 @@ jobs:
           MARIADB_PORT: ${{ job.services.mariadb.ports[3306] }}
           PGSQL_PORT: ${{ job.services.pgsql.ports[5432] }}
           SQLSRV_PORT: ${{ job.services.sqlsrv.ports[1433] }}
+          SINGLESTORE_PORT: ${{ job.services.singlestore.ports[3306] }}
       - run: php tests/coverage/scrutinizer.php
         if: matrix.coverage == 'xdebug'
