@@ -10,13 +10,13 @@
     ],
     "require": {
         "php": "^8.1",
-        "illuminate/database": "^10.0",
-        "singlestoredb/singlestoredb-laravel": "^1.5.1"
+        "illuminate/database": "^10.0"
     },
     "require-dev": {
         "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^10.0",
-        "phpstan/phpstan": "^1.10"
+        "phpstan/phpstan": "^1.10",
+        "singlestoredb/singlestoredb-laravel": "^1.5.1"
     },
     "autoload": {
         "psr-4": {
@@ -31,8 +31,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Staudenmeir\\LaravelCte\\DatabaseServiceProvider",
-                "SingleStore\\Laravel\\SingleStoreProvider"
+                "Staudenmeir\\LaravelCte\\DatabaseServiceProvider"
             ]
         }
     },
