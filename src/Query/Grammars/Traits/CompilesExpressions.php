@@ -107,7 +107,8 @@ trait CompilesExpressions
     public function compileSelect(Builder $query)
     {
         $sql = parent::compileSelect($query);
-        if ($query instanceof CteBuilder or $query instanceof SingleStoreBuilder) {
+
+        if ($query instanceof CteBuilder || $query instanceof SingleStoreBuilder) {
             if ($query->unionExpressions) {
                 $sql = $this->compileExpressions($query, $query->unionExpressions) . " $sql";
             }
