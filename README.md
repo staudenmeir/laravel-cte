@@ -1,11 +1,11 @@
-![CI](https://github.com/staudenmeir/laravel-cte/workflows/CI/badge.svg)
+# Laravel CTE
+
+[![CI](https://github.com/staudenmeir/laravel-cte/actions/workflows/ci.yml/badge.svg)](https://github.com/staudenmeir/laravel-cte/actions/workflows/ci.yml)
 [![Code Coverage](https://scrutinizer-ci.com/g/staudenmeir/laravel-cte/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/staudenmeir/laravel-cte/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/staudenmeir/laravel-cte/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/staudenmeir/laravel-cte/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/staudenmeir/laravel-cte/v/stable)](https://packagist.org/packages/staudenmeir/laravel-cte)
-[![Total Downloads](https://poser.pugx.org/staudenmeir/laravel-cte/downloads)](https://packagist.org/packages/staudenmeir/laravel-cte)
-[![License](https://poser.pugx.org/staudenmeir/laravel-cte/license)](https://packagist.org/packages/staudenmeir/laravel-cte)
-
-## Introduction
+[![Total Downloads](https://poser.pugx.org/staudenmeir/laravel-cte/downloads)](https://packagist.org/packages/staudenmeir/laravel-cte/stats)
+[![License](https://poser.pugx.org/staudenmeir/laravel-cte/license)](https://github.com/staudenmeir/laravel-cte/blob/master/LICENSE)
 
 This Laravel extension adds support for common table expressions (CTE) to the query builder and Eloquent.
 
@@ -27,6 +27,18 @@ Supports Laravel 5.5+.
 Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 
     composer require staudenmeir/laravel-cte:"^^^^1.0"
+
+## Versions
+
+| Laravel | Package |
+|:--------|:--------|
+| 10.x    | 1.7     |
+| 9.x     | 1.6     |
+| 8.x     | 1.5     |
+| 7.x     | 1.4     |
+| 6.x     | 1.2     |
+| 5.8     | 1.1     |
+| 5.5–5.7 | 1.0     |
 
 ## Usage
 

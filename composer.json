@@ -14,7 +14,7 @@
     },
     "require-dev": {
         "orchestra/testbench": "^8.0",
-        "phpunit/phpunit": "^10.0",
+        "phpunit/phpunit": "^10.1",
         "phpstan/phpstan": "^1.10",
         "singlestoredb/singlestoredb-laravel": "^1.5.1"
     },
