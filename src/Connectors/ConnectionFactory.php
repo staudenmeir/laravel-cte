@@ -27,7 +27,7 @@ class ConnectionFactory extends Base
      */
     protected function createConnection($driver, $connection, $database, $prefix = '', array $config = [])
     {
-        if ($driver != 'singlestore' && $resolver = Connection::getResolver($driver)) {
+        if ($driver !== 'singlestore' && $resolver = Connection::getResolver($driver)) {
             return $resolver($connection, $database, $prefix, $config); // @codeCoverageIgnore
         }
 
