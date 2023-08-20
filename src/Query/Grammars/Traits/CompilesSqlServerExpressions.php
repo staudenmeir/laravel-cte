@@ -26,7 +26,7 @@ trait CompilesSqlServerExpressions
     }
 
     /**
-     * Compile a common table expression for a query.
+     * Compile a common table expression for a query. TODO[L11]
      *
      * @param string $sql
      * @param \Illuminate\Database\Query\Builder $query
