@@ -117,10 +117,9 @@ class EloquentTest extends TestCase
 
     public function testUpdateWithLimit()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv', 
         // SingleStore support update with limit only when it is constrained to a single partition
         // https://docs.singlestore.com/cloud/reference/sql-reference/data-manipulation-language-dml/update/#update-using-limit
-        'singlestore'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -168,18 +167,16 @@ class EloquentTest extends TestCase
             $this->markTestSkipped();
         }
 
-        if ($this->database == 'singlestore') {
-            Post::withExpression('u', User::where('id', '<', 2))
-            ->whereIn('user_id', User::from('u')->select('id'))
-            ->limit(1)
-            ->delete();
+        if ($this->database === 'singlestore') {
+            $query = Post::withExpression('u', User::where('id', '<', 2));
         } else {
-            Post::withExpression('u', User::where('id', '>', 0))
-            ->whereIn('user_id', User::from('u')->select('id'))
-            ->orderBy('id')
-            ->limit(1)
-            ->delete();
+            $query = Post::withExpression('u', User::where('id', '>', 0))
+                         ->orderBy('id');
         }
+
+        $query->whereIn('user_id', User::from('u')->select('id'))
+              ->limit(1)
+              ->delete();
 
         $this->assertEquals([2], Post::pluck('user_id')->all());
     }
