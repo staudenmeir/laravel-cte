@@ -214,8 +214,7 @@ class QueryTest extends TestCase
 
     public function testWithMaterializedExpression()
     {
-        // TODO: SQLite 3.35.0+
-        if ($this->database !== 'pgsql') {
+        if (!in_array($this->database, ['pgsql', 'sqlite'])) {
             $this->markTestSkipped();
         }
 
@@ -251,8 +250,7 @@ class QueryTest extends TestCase
 
     public function testWithNonMaterializedExpression()
     {
-        // TODO SQLite 3.35.0+
-        if ($this->database !== 'pgsql') {
+        if (!in_array($this->database, ['pgsql', 'sqlite'])) {
             $this->markTestSkipped();
         }
 
