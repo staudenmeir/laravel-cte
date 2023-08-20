@@ -3,16 +3,22 @@
 namespace Staudenmeir\LaravelCte\Eloquent;
 
 use Staudenmeir\LaravelCte\Query\Builder;
+use Staudenmeir\LaravelCte\Query\OracleBuilder;
 
 trait QueriesExpressions
 {
     /**
      * Get a new query builder instance for the connection.
      *
-     * @return \Staudenmeir\LaravelCte\Query\Builder
+     * @return \Illuminate\Database\Query\Builder
      */
     protected function newBaseQueryBuilder()
     {
-        return new Builder($this->getConnection());
+        $connection = $this->getConnection();
+
+        return match ($connection->getDriverName()) {
+            'oracle' => new OracleBuilder($connection),
+            default => new Builder($connection),
+        };
     }
 }

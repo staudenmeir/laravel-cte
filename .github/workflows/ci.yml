@@ -90,7 +90,7 @@ jobs:
         if: matrix.database == 'sqlsrv'
       - run: mysql -h 127.0.0.1 -u root -ptest -P ${{ job.services.singlestore.ports[3306] }} -e "create database test"
         if: matrix.database == 'singlestore'
-      - run: composer update --no-interaction --no-progress --prefer-dist --prefer-${{ matrix.release }}
+      - run: composer update --no-interaction --no-progress --prefer-dist --prefer-${{ matrix.release }} --ignore-platform-req=ext-oci8
       - run: cp tests/config/database.ci.php tests/config/database.php
       - run: |
           PHPUNIT_FLAGS=$([ "${{ matrix.coverage }}" == "xdebug" ] && echo "--coverage-clover=coverage.xml" || echo "")
