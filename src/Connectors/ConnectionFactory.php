@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Staudenmeir\LaravelCte\Connections\MySqlConnection;
 use Staudenmeir\LaravelCte\Connections\PostgresConnection;
 use Staudenmeir\LaravelCte\Connections\SQLiteConnection;
+use Staudenmeir\LaravelCte\Connections\SingleStoreConnection;
 use Staudenmeir\LaravelCte\Connections\SqlServerConnection;
 
 class ConnectionFactory extends Base
@@ -26,7 +27,7 @@ class ConnectionFactory extends Base
      */
     protected function createConnection($driver, $connection, $database, $prefix = '', array $config = [])
     {
-        if ($resolver = Connection::getResolver($driver)) {
+        if ($driver !== 'singlestore' && $resolver = Connection::getResolver($driver)) {
             return $resolver($connection, $database, $prefix, $config); // @codeCoverageIgnore
         }
 
@@ -39,6 +40,8 @@ class ConnectionFactory extends Base
                 return new SQLiteConnection($connection, $database, $prefix, $config);
             case 'sqlsrv':
                 return new SqlServerConnection($connection, $database, $prefix, $config);
+            case 'singlestore':
+                return new SingleStoreConnection($connection, $database, $prefix, $config);
         }
 
         throw new InvalidArgumentException("Unsupported driver [{$driver}]"); // @codeCoverageIgnore

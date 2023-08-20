@@ -4,22 +4,27 @@ namespace Staudenmeir\LaravelCte\Tests;
 
 use DateTime;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder as BaseBuilder;
 use Illuminate\Database\Query\Processors\Processor;
 use Illuminate\Support\Facades\DB;
 use Staudenmeir\LaravelCte\DatabaseServiceProvider;
 use Staudenmeir\LaravelCte\Query\Builder;
+use Staudenmeir\LaravelCte\Query\SingleStoreBuilder;
 
 class QueryTest extends TestCase
 {
     public function testWithExpression()
     {
+        $posts = function (BaseBuilder $query) {
+            $query->from('posts');
+        };
+
         $rows = DB::table('u')
             ->select('u.id')
             ->withExpression('u', DB::table('users'))
-            ->withExpression('p', function (Builder $query) {
-                $query->from('posts');
-            })
+            ->withExpression('p', $posts)
             ->join('p', 'p.user_id', '=', 'u.id')
+            ->orderBy('u.id')
             ->get();
 
         $this->assertEquals([1, 2], $rows->pluck('id')->all());
@@ -79,7 +84,14 @@ class QueryTest extends TestCase
 
     public function testWithRecursiveExpression()
     {
-        $query = 'select 1 union all select number + 1 from numbers where number < 3';
+        // SingleStore doesn't support previous variant of the RCTE
+        // It throws the following error:
+        // Unsupported recursive common table expression query shape: recursive CTE select cannot be materialized.
+        if ($this->database === 'singlestore') {
+            $query = 'select 1 as number from `users` limit 1 union all select number + 1 from numbers where number < 3';
+        } else {
+            $query = 'select 1 union all select number + 1 from numbers where number < 3';
+        }
 
         $rows = DB::table('numbers')
             ->withRecursiveExpression('numbers', $query, ['number'])
@@ -325,7 +337,7 @@ EOT;
             ->withExpression('u', DB::table('users')->select('id')->where('id', '>', 1))
             ->insertUsing(['user_id'], DB::table('u'));
 
-        $this->assertEquals([1, 2, 2, 3], DB::table('posts')->pluck('user_id')->all());
+        $this->assertEquals([1, 2, 2, 3], DB::table('posts')->orderBy('user_id')->pluck('user_id')->all());
     }
 
     public function testInsertUsingWithRecursionLimit()
@@ -373,7 +385,9 @@ EOT;
 
     public function testUpdateWithLimit()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        // SingleStore support update with limit only when it is constrained to a single partition
+        // https://docs.singlestore.com/cloud/reference/sql-reference/data-manipulation-language-dml/update/#update-using-limit
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -440,12 +454,18 @@ EOT;
             $this->markTestSkipped();
         }
 
-        DB::table('posts')
-            ->withExpression('u', DB::table('users')->where('id', '>', 0))
-            ->whereIn('user_id', DB::table('u')->select('id'))
-            ->orderBy('id')
-            ->limit(1)
-            ->delete();
+        if ($this->database === 'singlestore') {
+            $query = DB::table('posts')
+                ->withExpression('u', DB::table('users')->where('id', '<', 2));
+        } else {
+            $query = DB::table('posts')
+                  ->withExpression('u', DB::table('users')->where('id', '>', 0))
+                  ->orderBy('id');
+        }
+
+        $query->whereIn('user_id', DB::table('u')->select('id'))
+              ->limit(1)
+              ->delete();
 
         $this->assertEquals([2], DB::table('posts')->pluck('user_id')->all());
     }
@@ -469,11 +489,17 @@ EOT;
         $grammar = 'Staudenmeir\LaravelCte\Query\Grammars\\'.$database.'Grammar';
         $processor = $this->createMock(Processor::class);
 
-        return new Builder($connection, new $grammar(), $processor);
+        return match ($database) {
+            'singlestore' => new SingleStoreBuilder($connection, new $grammar(), $processor),
+            default => new Builder($connection, new $grammar(), $processor),
+        };
     }
 
     protected function getPackageProviders($app)
     {
-        return [DatabaseServiceProvider::class];
+        return array_merge(
+            parent::getPackageProviders($app),
+            [DatabaseServiceProvider::class]
+        );
     }
 }

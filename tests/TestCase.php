@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Base;
 use Staudenmeir\LaravelCte\Tests\Models\Post;
 use Staudenmeir\LaravelCte\Tests\Models\User;
+use SingleStore\Laravel\SingleStoreProvider;
 
 abstract class TestCase extends Base
 {
@@ -54,5 +55,10 @@ abstract class TestCase extends Base
         $app['config']->set('database.default', 'testing');
 
         $app['config']->set('database.connections.testing', $config[$this->database]);
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [SingleStoreProvider::class];
     }
 }
