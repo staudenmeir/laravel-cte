@@ -3,6 +3,7 @@
 namespace Staudenmeir\LaravelCte\Eloquent;
 
 use Staudenmeir\LaravelCte\Query\Builder;
+use Staudenmeir\LaravelCte\Query\SingleStoreBuilder;
 
 trait QueriesExpressions
 {
@@ -13,6 +14,11 @@ trait QueriesExpressions
      */
     protected function newBaseQueryBuilder()
     {
-        return new Builder($this->getConnection());
+        $connection = $this->getConnection();
+
+        return match ($connection->getDriverName()) {
+            'singlestore' => new SingleStoreBuilder($connection),
+            default => new Builder($connection),
+        };
     }
 }
