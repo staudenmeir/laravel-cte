@@ -82,6 +82,19 @@ class QueryTest extends TestCase
         $this->assertEquals($expected, $builder->toSql());
     }
 
+    public function testWithExpressionSingleStore()
+    {
+        $builder = $this->getBuilder('SingleStore');
+        $builder->select('u.id')
+                ->from('u')
+                ->withExpression('u', $this->getBuilder('SingleStore')->from('users'))
+                ->withExpression('p', $this->getBuilder('SingleStore')->from('posts'))
+                ->join('p', 'p.user_id', '=', 'u.id');
+
+        $expected = 'with `u` as (select * from `users`), `p` as (select * from `posts`) select `u`.`id` from `u` inner join `p` on `p`.`user_id` = `u`.`id`';
+        $this->assertEquals($expected, $builder->toSql());
+    }
+
     public function testWithRecursiveExpression()
     {
         // SingleStore doesn't support previous variant of the RCTE
@@ -185,6 +198,25 @@ class QueryTest extends TestCase
             ->withRecursiveExpression('numbers', $query, ['number']);
 
         $expected = 'with [numbers] ([number]) as ('.$query->toSql().') select * from [numbers]';
+        $this->assertEquals($expected, $builder->toSql());
+        $this->assertEquals([3], $builder->getRawBindings()['expressions']);
+    }
+
+    public function testWithRecursiveExpressionSingleStore()
+    {
+        $query = $this->getBuilder('SingleStore')
+                      ->selectRaw('1')
+                      ->unionAll(
+                          $this->getBuilder('SingleStore')
+                               ->selectRaw('number + 1')
+                               ->from('numbers')
+                               ->where('number', '<', 3)
+                      );
+        $builder = $this->getBuilder('SingleStore');
+        $builder->from('numbers')
+                ->withRecursiveExpression('numbers', $query, ['number']);
+
+        $expected = 'with recursive `numbers` (`number`) as ('.$query->toSql().') select * from `numbers`';
         $this->assertEquals($expected, $builder->toSql());
         $this->assertEquals([3], $builder->getRawBindings()['expressions']);
     }
@@ -488,7 +520,7 @@ EOT;
         $processor = $this->createMock(Processor::class);
 
         return match ($database) {
-            'singlestore' => new SingleStoreBuilder($connection, new $grammar(), $processor),
+            'SingleStore' => new SingleStoreBuilder($connection, new $grammar(), $processor),
             default => new Builder($connection, new $grammar(), $processor),
         };
     }
