@@ -1,6 +1,9 @@
 build:
   environment:
-    php: 8.2
+    php:
+      version: 8.2
+      pecl_extensions:
+        - oci8
 tools:
   external_code_coverage:
     runs: 5
