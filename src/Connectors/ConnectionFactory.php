@@ -41,10 +41,10 @@ class ConnectionFactory extends Base
                 return new SQLiteConnection($connection, $database, $prefix, $config);
             case 'sqlsrv':
                 return new SqlServerConnection($connection, $database, $prefix, $config);
-            case 'singlestore':
-                return new SingleStoreConnection($connection, $database, $prefix, $config);
             case 'oracle':
                 return new OracleConnection($connection, $database, $prefix, $config);
+            case 'singlestore':
+                return new SingleStoreConnection($connection, $database, $prefix, $config);
         }
 
         throw new InvalidArgumentException("Unsupported driver [{$driver}]"); // @codeCoverageIgnore

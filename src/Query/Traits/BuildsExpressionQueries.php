@@ -76,8 +76,8 @@ trait BuildsExpressionQueries
             'pgsql' => new PostgresGrammar(),
             'sqlite' => new SQLiteGrammar(),
             'sqlsrv' => new SqlServerGrammar(),
-            'singlestore' => new SingleStoreGrammar(),
             'oracle' => new OracleGrammar(),
+            'singlestore' => new SingleStoreGrammar(),
             default => throw new RuntimeException('This database is not supported.'), // @codeCoverageIgnore
         };
 

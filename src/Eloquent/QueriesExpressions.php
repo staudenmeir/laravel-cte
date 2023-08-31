@@ -18,8 +18,8 @@ trait QueriesExpressions
         $connection = $this->getConnection();
 
         return match ($connection->getDriverName()) {
-            'singlestore' => new SingleStoreBuilder($connection),
             'oracle' => new OracleBuilder($connection),
+            'singlestore' => new SingleStoreBuilder($connection),
             default => new Builder($connection),
         };
     }
