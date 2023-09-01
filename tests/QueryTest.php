@@ -9,7 +9,6 @@ use Illuminate\Database\Query\Processors\Processor;
 use Illuminate\Support\Facades\DB;
 use Staudenmeir\LaravelCte\DatabaseServiceProvider;
 use Staudenmeir\LaravelCte\Query\Builder;
-use Staudenmeir\LaravelCte\Query\OracleBuilder;
 use Staudenmeir\LaravelCte\Query\SingleStoreBuilder;
 
 class QueryTest extends TestCase
@@ -80,19 +79,6 @@ class QueryTest extends TestCase
             ->join('p', 'p.user_id', '=', 'u.id');
 
         $expected = 'with [u] as (select * from [users]), [p] as (select * from [posts]) select [u].[id] from [u] inner join [p] on [p].[user_id] = [u].[id]';
-        $this->assertEquals($expected, $builder->toSql());
-    }
-
-    public function testWithExpressionOracle()
-    {
-        $builder = $this->getBuilder('Oracle');
-        $builder->select('u.id')
-                ->from('u')
-                ->withExpression('u', $this->getBuilder('Oracle')->from('users'))
-                ->withExpression('p', $this->getBuilder('Oracle')->from('posts'))
-                ->join('p', 'p.user_id', '=', 'u.id');
-
-        $expected = 'with "U" as (select * from "USERS"), "P" as (select * from "POSTS") select "U"."ID" from "U" inner join "P" on "P"."USER_ID" = "U"."ID"';
         $this->assertEquals($expected, $builder->toSql());
     }
 
@@ -212,25 +198,6 @@ class QueryTest extends TestCase
             ->withRecursiveExpression('numbers', $query, ['number']);
 
         $expected = 'with [numbers] ([number]) as ('.$query->toSql().') select * from [numbers]';
-        $this->assertEquals($expected, $builder->toSql());
-        $this->assertEquals([3], $builder->getRawBindings()['expressions']);
-    }
-
-    public function testWithRecursiveExpressionOracle()
-    {
-        $query = $this->getBuilder('Oracle')
-                      ->selectRaw('1')
-                      ->unionAll(
-                          $this->getBuilder('Oracle')
-                               ->selectRaw('number + 1')
-                               ->from('numbers')
-                               ->where('number', '<', 3)
-                      );
-        $builder = $this->getBuilder('Oracle');
-        $builder->from('numbers')
-                ->withRecursiveExpression('numbers', $query, ['number']);
-
-        $expected = 'with "NUMBERS" ("NUMBER") as ('.$query->toSql().') select * from "NUMBERS"';
         $this->assertEquals($expected, $builder->toSql());
         $this->assertEquals([3], $builder->getRawBindings()['expressions']);
     }
@@ -553,7 +520,6 @@ EOT;
         $processor = $this->createMock(Processor::class);
 
         return match ($database) {
-            'Oracle' => new OracleBuilder($connection, new $grammar(), $processor),
             'SingleStore' => new SingleStoreBuilder($connection, new $grammar(), $processor),
             default => new Builder($connection, new $grammar(), $processor),
         };
