@@ -2,6 +2,9 @@
 
 namespace Staudenmeir\LaravelCte\Query\Grammars\Traits;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait CompilesOracleExpressions
 {
     use CompilesExpressions;
