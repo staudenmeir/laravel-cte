@@ -15,5 +15,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
-      - run: composer update --no-interaction --no-progress --prefer-dist
+      - run:
+          composer require --dev yajra/laravel-oci8 --ignore-platform-req=ext-oci8
+          composer update --no-interaction --no-progress --prefer-dist
       - run: vendor/bin/phpstan analyse --error-format=github
