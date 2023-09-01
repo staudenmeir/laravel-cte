@@ -42,7 +42,7 @@ class ConnectionFactory extends Base
             case 'sqlsrv':
                 return new SqlServerConnection($connection, $database, $prefix, $config);
             case 'oracle':
-                return new OracleConnection($connection, $database, $prefix, $config);
+                return new OracleConnection($connection, $database, $prefix, $config); // @codeCoverageIgnore
             case 'singlestore':
                 return new SingleStoreConnection($connection, $database, $prefix, $config);
         }

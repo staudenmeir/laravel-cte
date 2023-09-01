@@ -5,6 +5,9 @@ namespace Staudenmeir\LaravelCte\Connections;
 use Staudenmeir\LaravelCte\Query\OracleBuilder;
 use Yajra\Oci8\Oci8Connection;
 
+/**
+ * @codeCoverageIgnore
+ */
 class OracleConnection extends Oci8Connection
 {
     /**
