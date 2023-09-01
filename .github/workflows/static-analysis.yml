@@ -16,6 +16,6 @@ jobs:
         with:
           php-version: 8.2
       - run: |
-          composer require --ignore-platform-req=ext-oci8 --dev yajra/laravel-oci8
-          composer update --no-interaction --no-progress --prefer-dist --ignore-platform-req=ext-oci8
+          composer require --dev --ignore-platform-req=ext-oci8 yajra/laravel-oci8
+          composer update --no-interaction --no-progress --prefer-dist
       - run: vendor/bin/phpstan analyse --error-format=github
