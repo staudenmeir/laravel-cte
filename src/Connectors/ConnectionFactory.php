@@ -22,12 +22,11 @@ class ConnectionFactory extends Base
      * @param string $database
      * @param string $prefix
      * @param array $config
-     * @return MySqlConnection|OracleConnection|PostgresConnection|SingleStoreConnection|SQLiteConnection|SqlServerConnection
+     * @return \Illuminate\Database\Connection
      *
      * @throws \InvalidArgumentException
      */
-    protected function createConnection(string $driver, \PDO|\Closure $connection, string $database, string $prefix = '', array $config = []): SQLiteConnection|SingleStoreConnection|PostgresConnection|MySqlConnection|OracleConnection|SqlServerConnection
-    {
+    protected function createConnection(string $driver, \PDO|\Closure $connection, string $database, string $prefix = '', array $config = []): \Illuminate\Database\Connection
         if ($driver !== 'singlestore' && $resolver = Connection::getResolver($driver)) {
             return $resolver($connection, $database, $prefix, $config); // @codeCoverageIgnore
         }
