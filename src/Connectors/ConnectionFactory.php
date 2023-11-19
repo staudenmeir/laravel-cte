@@ -17,11 +17,11 @@ class ConnectionFactory extends Base
     /**
      * Create a new connection instance.
      *
-     * @param  string  $driver
-     * @param  \PDO|\Closure  $connection
-     * @param  string  $database
-     * @param  string  $prefix
-     * @param  array  $config
+     * @param string $driver
+     * @param \PDO|\Closure $connection
+     * @param string $database
+     * @param string $prefix
+     * @param array $config
      * @return \Illuminate\Database\Connection
      *
      * @throws \InvalidArgumentException
@@ -31,6 +31,7 @@ class ConnectionFactory extends Base
         if ($driver !== 'singlestore' && $resolver = Connection::getResolver($driver)) {
             return $resolver($connection, $database, $prefix, $config); // @codeCoverageIgnore
         }
+
         return match ($driver) {
             'mysql' => new MySqlConnection($connection, $database, $prefix, $config),
             'pgsql' => new PostgresConnection($connection, $database, $prefix, $config),
