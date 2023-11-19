@@ -17,28 +17,28 @@ class ConnectionFactory extends Base
     /**
      * Create a new connection instance.
      *
-     * @param string $driver
-     * @param \PDO|\Closure $connection
-     * @param string $database
-     * @param string $prefix
-     * @param array $config
+     * @param  string  $driver
+     * @param  \PDO|\Closure  $connection
+     * @param  string  $database
+     * @param  string  $prefix
+     * @param  array  $config
      * @return \Illuminate\Database\Connection
      *
      * @throws \InvalidArgumentException
      */
-    protected function createConnection(string $driver, \PDO|\Closure $connection, string $database, string $prefix = '', array $config = []): \Illuminate\Database\Connection
+    protected function createConnection($driver, $connection, $database, $prefix = '', array $config = [])
+    {
         if ($driver !== 'singlestore' && $resolver = Connection::getResolver($driver)) {
             return $resolver($connection, $database, $prefix, $config); // @codeCoverageIgnore
         }
-
         return match ($driver) {
             'mysql' => new MySqlConnection($connection, $database, $prefix, $config),
             'pgsql' => new PostgresConnection($connection, $database, $prefix, $config),
             'sqlite' => new SQLiteConnection($connection, $database, $prefix, $config),
             'sqlsrv' => new SqlServerConnection($connection, $database, $prefix, $config),
-            'oracle' => new OracleConnection($connection, $database, $prefix, $config), // @codeCoverageIgnore
+            'oracle' => new OracleConnection($connection, $database, $prefix, $config),
             'singlestore' => new SingleStoreConnection($connection, $database, $prefix, $config),
-            default => throw new InvalidArgumentException("Unsupported driver [{$driver}]"), // @codeCoverageIgnore
+            default => throw new InvalidArgumentException("Unsupported driver [{$driver}]"),
         };
     }
 }
