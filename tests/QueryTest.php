@@ -100,7 +100,7 @@ class QueryTest extends TestCase
         // SingleStore doesn't support previous variant of the RCTE
         // It throws the following error:
         // Unsupported recursive common table expression query shape: recursive CTE select cannot be materialized.
-        if ($this->database === 'singlestore') {
+        if ($this->connection === 'singlestore') {
             $query = 'select 1 as number from `users` limit 1 union all select number + 1 from numbers where number < 3';
         } else {
             $query = 'select 1 union all select number + 1 from numbers where number < 3';
@@ -223,7 +223,7 @@ class QueryTest extends TestCase
 
     public function testWithRecursiveExpressionAndCycleDetection()
     {
-        if (!in_array($this->database, ['mariadb', 'pgsql'])) {
+        if (!in_array($this->connection, ['mariadb', 'pgsql'])) {
             $this->markTestSkipped();
         }
 
@@ -233,11 +233,11 @@ class QueryTest extends TestCase
                   ->withRecursiveExpressionAndCycleDetection('numbers', $query, 'modulo', 'is_cycle', 'path', ['number', 'modulo'])
                   ->get();
 
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->assertEquals([1, 2, 3, 4, 5], $rows->pluck('number')->all());
         }
 
-        if ($this->database === 'pgsql') {
+        if ($this->connection === 'pgsql') {
             $this->assertEquals([1, 2, 3, 4, 5, 6], $rows->pluck('number')->all());
             $this->assertSame(false, $rows[0]->is_cycle);
             $this->assertEquals('{(1)}', $rows[0]->path);
@@ -246,7 +246,7 @@ class QueryTest extends TestCase
 
     public function testWithMaterializedExpression()
     {
-        if (!in_array($this->database, ['pgsql', 'sqlite'])) {
+        if (!in_array($this->connection, ['pgsql', 'sqlite'])) {
             $this->markTestSkipped();
         }
 
@@ -282,7 +282,7 @@ class QueryTest extends TestCase
 
     public function testWithNonMaterializedExpression()
     {
-        if (!in_array($this->database, ['pgsql', 'sqlite'])) {
+        if (!in_array($this->connection, ['pgsql', 'sqlite'])) {
             $this->markTestSkipped();
         }
 
@@ -383,7 +383,7 @@ EOT;
 
     public function testUpdate()
     {
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->markTestSkipped();
         }
 
@@ -399,7 +399,7 @@ EOT;
 
     public function testUpdateWithJoin()
     {
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->markTestSkipped();
         }
 
@@ -417,7 +417,7 @@ EOT;
     {
         // SingleStore support update with limit only when it is constrained to a single partition
         // https://docs.singlestore.com/cloud/reference/sql-reference/data-manipulation-language-dml/update/#update-using-limit
-        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -435,7 +435,7 @@ EOT;
 
     public function testUpdateFrom()
     {
-        if ($this->database !== 'pgsql') {
+        if ($this->connection !== 'pgsql') {
             $this->markTestSkipped();
         }
 
@@ -451,7 +451,7 @@ EOT;
 
     public function testDelete()
     {
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->markTestSkipped();
         }
 
@@ -465,7 +465,7 @@ EOT;
 
     public function testDeleteWithJoin()
     {
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->markTestSkipped();
         }
 
@@ -480,11 +480,11 @@ EOT;
 
     public function testDeleteWithLimit()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
-        if ($this->database === 'singlestore') {
+        if ($this->connection === 'singlestore') {
             $query = DB::table('posts')
                 ->withExpression('u', DB::table('users')->where('id', '<', 2));
         } else {

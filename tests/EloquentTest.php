@@ -38,7 +38,7 @@ class EloquentTest extends TestCase
 
     public function testWithRecursiveExpressionAndCycleDetection()
     {
-        if (!in_array($this->database, ['mariadb', 'pgsql'])) {
+        if (!in_array($this->connection, ['mariadb', 'pgsql'])) {
             $this->markTestSkipped();
         }
 
@@ -54,11 +54,11 @@ class EloquentTest extends TestCase
                      ->withRecursiveExpressionAndCycleDetection('ancestors', $query, 'id', 'is_cycle', 'path')
                      ->get();
 
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->assertEquals([3, 2, 1], $users->pluck('id')->all());
         }
 
-        if ($this->database === 'pgsql') {
+        if ($this->connection === 'pgsql') {
             $this->assertEquals([3, 2, 1, 3], $users->pluck('id')->all());
             $this->assertSame(false, $users[0]->is_cycle);
             $this->assertEquals('{(3)}', $users[0]->path);
@@ -87,7 +87,7 @@ class EloquentTest extends TestCase
 
     public function testUpdate()
     {
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->markTestSkipped();
         }
 
@@ -102,7 +102,7 @@ class EloquentTest extends TestCase
 
     public function testUpdateWithJoin()
     {
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->markTestSkipped();
         }
 
@@ -119,7 +119,7 @@ class EloquentTest extends TestCase
     {
         // SingleStore support update with limit only when it is constrained to a single partition
         // https://docs.singlestore.com/cloud/reference/sql-reference/data-manipulation-language-dml/update/#update-using-limit
-        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -136,7 +136,7 @@ class EloquentTest extends TestCase
 
     public function testDelete()
     {
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->markTestSkipped();
         }
 
@@ -149,7 +149,7 @@ class EloquentTest extends TestCase
 
     public function testDeleteWithJoin()
     {
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->markTestSkipped();
         }
 
@@ -163,11 +163,11 @@ class EloquentTest extends TestCase
 
     public function testDeleteWithLimit()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
-        if ($this->database === 'singlestore') {
+        if ($this->connection === 'singlestore') {
             $query = Post::withExpression('u', User::where('id', '<', 2));
         } else {
             $query = Post::withExpression('u', User::where('id', '>', 0))
