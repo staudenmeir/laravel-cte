@@ -333,6 +333,7 @@ class QueryTest extends TestCase
                          ->where('id', 2)
                    )
                    ->withExpression('u', DB::table('users'))
+                    ->orderBy('id')
                    ->get();
 
         $this->assertEquals([1, 2], $rows->pluck('id')->all());
