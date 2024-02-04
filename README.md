@@ -147,7 +147,7 @@ $tree = DB::table('tree')
 
 ### INSERT/UPDATE/DELETE Queries
 
-You can use common table expressions in `INSERT`(Laravel 5.7.17+), `UPDATE` and `DELETE` queries:
+You can use common table expressions in `INSERT`, `UPDATE` and `DELETE` queries:
 
 ```php
 DB::table('profiles')
