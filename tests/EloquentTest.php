@@ -78,7 +78,12 @@ class EloquentTest extends TestCase
 
     public function testInsertUsing()
     {
-        $query = User::selectRaw('(select max(id) from posts) + id as id')
+        $id = match ($this->connection) {
+            'firebird' => '(select max("id") from "posts") + "id" as "id"',
+            default => '(select max(id) from posts) + id as id',
+        };
+
+        $query = User::selectRaw($id)
             ->addSelect('id as post_id')
             ->selectRaw('1 as views')
             ->where('id', '>', 1);
@@ -91,7 +96,7 @@ class EloquentTest extends TestCase
 
     public function testUpdate()
     {
-        if ($this->connection === 'mariadb') {
+        if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -106,7 +111,7 @@ class EloquentTest extends TestCase
 
     public function testUpdateWithJoin()
     {
-        if ($this->connection === 'mariadb') {
+        if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -121,7 +126,7 @@ class EloquentTest extends TestCase
 
     public function testUpdateWithLimit()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -138,7 +143,7 @@ class EloquentTest extends TestCase
 
     public function testDelete()
     {
-        if ($this->connection === 'mariadb') {
+        if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -151,7 +156,7 @@ class EloquentTest extends TestCase
 
     public function testDeleteWithJoin()
     {
-        if ($this->connection === 'mariadb') {
+        if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -165,7 +170,7 @@ class EloquentTest extends TestCase
 
     public function testDeleteWithLimit()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 

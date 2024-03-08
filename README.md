@@ -20,6 +20,7 @@ Supports Laravel 5.5+.
 - SQL Server 2008+
 - Oracle 9.2+
 - SingleStore 8.1+
+- Firebird
 
 ## Installation
 

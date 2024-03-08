@@ -28,11 +28,11 @@ class QueryTest extends TestCase
 
     public function testWithRecursiveExpression()
     {
-        if ($this->connection === 'singlestore') {
-            $query = 'select 1 as number from `users` limit 1 union all select number + 1 from numbers where number < 3';
-        } else {
-            $query = 'select 1 union all select number + 1 from numbers where number < 3';
-        }
+        $query = match ($this->connection) {
+            'singlestore' => 'select 1 as number from `users` limit 1 union all select number + 1 from numbers where number < 3',
+            'firebird' => 'select 1 from RDB$DATABASE union all select "number" + 1 from "numbers" where "number" < 3',
+            default => 'select 1 union all select number + 1 from numbers where number < 3',
+        };
 
         $rows = DB::table('numbers')
             ->withRecursiveExpression('numbers', $query, ['number'])
@@ -117,7 +117,7 @@ class QueryTest extends TestCase
                          ->where('id', 2)
                    )
                    ->withExpression('u', DB::table('users'))
-                    ->orderBy('id')
+                   ->when($this->connection !== 'firebird', fn (BaseBuilder $query) => $query->orderBy('id'))
                    ->get();
 
         $this->assertEquals([1, 2], $rows->pluck('id')->all());
@@ -125,8 +125,13 @@ class QueryTest extends TestCase
 
     public function testInsertUsing()
     {
+        $id = match ($this->connection) {
+            'firebird' => '(select max("id") from "posts") + "id" as "id"',
+            default => '(select max(id) from posts) + id as id',
+        };
+
         $query = DB::table('users')
-            ->selectRaw('(select max(id) from posts) + id as id')
+            ->selectRaw($id)
             ->addSelect('id as post_id')
             ->selectRaw('1 as views')
             ->where('id', '>', 1);
@@ -161,7 +166,7 @@ class QueryTest extends TestCase
 
     public function testUpdate()
     {
-        if ($this->connection === 'mariadb') {
+        if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -177,7 +182,7 @@ class QueryTest extends TestCase
 
     public function testUpdateWithJoin()
     {
-        if ($this->connection === 'mariadb') {
+        if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -193,7 +198,7 @@ class QueryTest extends TestCase
 
     public function testUpdateWithLimit()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -227,7 +232,7 @@ class QueryTest extends TestCase
 
     public function testDelete()
     {
-        if ($this->connection === 'mariadb') {
+        if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -241,7 +246,7 @@ class QueryTest extends TestCase
 
     public function testDeleteWithJoin()
     {
-        if ($this->connection === 'mariadb') {
+        if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -256,7 +261,7 @@ class QueryTest extends TestCase
 
     public function testDeleteWithLimit()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 

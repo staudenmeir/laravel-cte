@@ -6,6 +6,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Database\Query\Processors\Processor;
 use RuntimeException;
+use Staudenmeir\LaravelCte\Query\Grammars\FirebirdGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\MySqlGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\OracleGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\PostgresGrammar;
@@ -78,6 +79,7 @@ trait BuildsExpressionQueries
             'sqlsrv' => new SqlServerGrammar(),
             'oracle' => new OracleGrammar(),
             'singlestore' => new SingleStoreGrammar(),
+            'firebird' => new FirebirdGrammar(),
             default => throw new RuntimeException('This database is not supported.'), // @codeCoverageIgnore
         };
 

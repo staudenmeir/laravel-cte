@@ -5,6 +5,7 @@ namespace Staudenmeir\LaravelCte\Connectors;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Connectors\ConnectionFactory as Base;
 use InvalidArgumentException;
+use Staudenmeir\LaravelCte\Connections\FirebirdConnection;
 use Staudenmeir\LaravelCte\Connections\MySqlConnection;
 use Staudenmeir\LaravelCte\Connections\OracleConnection;
 use Staudenmeir\LaravelCte\Connections\PostgresConnection;
@@ -28,7 +29,9 @@ class ConnectionFactory extends Base
      */
     protected function createConnection($driver, $connection, $database, $prefix = '', array $config = [])
     {
-        if ($driver !== 'singlestore' && $resolver = Connection::getResolver($driver)) {
+        $resolver = Connection::getResolver($driver);
+
+        if (!in_array($driver, ['singlestore', 'firebird']) && $resolver) {
             return $resolver($connection, $database, $prefix, $config); // @codeCoverageIgnore
         }
 
@@ -39,6 +42,7 @@ class ConnectionFactory extends Base
             'sqlsrv' => new SqlServerConnection($connection, $database, $prefix, $config),
             'oracle' => new OracleConnection($connection, $database, $prefix, $config),
             'singlestore' => new SingleStoreConnection($connection, $database, $prefix, $config),
+            'firebird' => new FirebirdConnection($connection, $database, $prefix, $config),
             default => throw new InvalidArgumentException("Unsupported driver [{$driver}]"),
         };
     }

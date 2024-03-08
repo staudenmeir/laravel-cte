@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelCte\Tests;
 
+use HarryGulliford\Firebird\FirebirdServiceProvider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,8 @@ abstract class TestCase extends Base
 
         parent::setUp();
 
-        Schema::dropAllTables();
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('posts');
 
         Schema::create('users', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->unique();
@@ -75,6 +77,6 @@ abstract class TestCase extends Base
 
     protected function getPackageProviders($app)
     {
-        return [SingleStoreProvider::class];
+        return [SingleStoreProvider::class, FirebirdServiceProvider::class];
     }
 }
