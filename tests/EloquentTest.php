@@ -3,7 +3,6 @@
 namespace Staudenmeir\LaravelCte\Tests;
 
 use DateTime;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 use Staudenmeir\LaravelCte\Tests\Models\Post;
 use Staudenmeir\LaravelCte\Tests\Models\User;
@@ -12,12 +11,12 @@ class EloquentTest extends TestCase
 {
     public function testWithExpression()
     {
-        $users = User::withExpression('ids', 'select 1 union all select 2', ['id'])
-            ->whereIn('id', function (Builder $query) {
-                $query->from('ids');
-            })->orderBy('id')->get();
+        $users = User::withExpression('u', User::where('id', '>', 1))
+            ->from('u')
+            ->orderBy('id')
+            ->get();
 
-        $this->assertEquals([1, 2], $users->pluck('id')->all());
+        $this->assertEquals([2, 3], $users->pluck('id')->all());
     }
 
     public function testWithRecursiveExpression()
@@ -79,8 +78,13 @@ class EloquentTest extends TestCase
 
     public function testInsertUsing()
     {
-        Post::withExpression('u', User::select('id')->where('id', '>', 1))
-          ->insertUsing(['user_id'], User::from('u'));
+        $query = User::selectRaw('(select max(id) from posts) + id as id')
+            ->addSelect('id as post_id')
+            ->selectRaw('1 as views')
+            ->where('id', '>', 1);
+
+        Post::withExpression('u', $query)
+          ->insertUsing(['id', 'user_id', 'views'], User::from('u'));
 
         $this->assertEquals([1, 2, 2, 3], Post::orderBy('user_id')->pluck('user_id')->all());
     }
@@ -117,8 +121,6 @@ class EloquentTest extends TestCase
 
     public function testUpdateWithLimit()
     {
-        // SingleStore support update with limit only when it is constrained to a single partition
-        // https://docs.singlestore.com/cloud/reference/sql-reference/data-manipulation-language-dml/update/#update-using-limit
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }

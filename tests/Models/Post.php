@@ -8,4 +8,6 @@ use Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 class Post extends Model
 {
     use QueriesExpressions;
+
+    public $incrementing = false;
 }
