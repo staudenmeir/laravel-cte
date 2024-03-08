@@ -123,6 +123,23 @@ class QueryTest extends TestCase
         $this->assertEquals([1, 2], $rows->pluck('id')->all());
     }
 
+    public function testOuterUnionWithRecursionLimit()
+    {
+        if ($this->connection !== 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
+        $query = 'select 1 union all select number + 1 from numbers where number < 102';
+
+        $rows = DB::table('numbers')
+            ->unionAll(DB::table('numbers'))
+            ->withRecursiveExpression('numbers', $query, ['number'])
+            ->recursionLimit(101)
+            ->get();
+
+        $this->assertCount(204, $rows);
+    }
+
     public function testInsertUsing()
     {
         $id = match ($this->connection) {
