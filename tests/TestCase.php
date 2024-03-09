@@ -11,6 +11,7 @@ use Orchestra\Testbench\TestCase as Base;
 use Staudenmeir\LaravelCte\Tests\Models\Post;
 use Staudenmeir\LaravelCte\Tests\Models\User;
 use SingleStore\Laravel\SingleStoreProvider;
+use Yajra\Oci8\Oci8ServiceProvider;
 
 abstract class TestCase extends Base
 {
@@ -77,7 +78,7 @@ abstract class TestCase extends Base
 
     protected function getPackageProviders($app)
     {
-        return []; // TODO[L11]
-        return [SingleStoreProvider::class, FirebirdServiceProvider::class];
+        return [Oci8ServiceProvider::class]; // TODO[L11]
+        return [Oci8ServiceProvider::class, SingleStoreProvider::class, FirebirdServiceProvider::class];
     }
 }

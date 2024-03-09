@@ -56,6 +56,17 @@ services:
       retries: 10
     networks:
       - test
+  oracle:
+    image: 'gvenzl/oracle-xe:latest'
+    environment:
+      ORACLE_PASSWORD: password
+    healthcheck:
+      test: healthcheck.sh
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - test
   singlestore:
     image: 'ghcr.io/singlestore-labs/singlestoredb-dev:latest'
     environment:

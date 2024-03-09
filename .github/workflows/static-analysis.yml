@@ -22,10 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           docker compose -f docker-compose.yml -f docker-compose.ci.yml run --rm php${{ matrix.php }} \
-            composer require --dev --ignore-platform-req=ext-oci8 yajra/laravel-oci8
-          docker compose -f docker-compose.yml -f docker-compose.ci.yml run --rm php${{ matrix.php }} \
-            composer update --no-interaction --no-progress --prefer-dist --prefer-${{ matrix.release }} \
-            --ignore-platform-req=ext-oci8
+            composer update --no-interaction --no-progress --prefer-dist --prefer-${{ matrix.release }}
       - name: Analyse code
         run: |
           docker compose -f docker-compose.yml -f docker-compose.ci.yml run --rm php${{ matrix.php }} \

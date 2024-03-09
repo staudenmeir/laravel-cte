@@ -9,6 +9,15 @@ use Staudenmeir\LaravelCte\DatabaseServiceProvider;
 
 class QueryTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if ($this->connection === 'oracle') {
+            $this->markTestSkipped();
+        }
+    }
+
     public function testWithExpression()
     {
         $posts = function (BaseBuilder $query) {

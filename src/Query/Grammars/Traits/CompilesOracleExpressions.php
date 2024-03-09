@@ -4,9 +4,6 @@ namespace Staudenmeir\LaravelCte\Query\Grammars\Traits;
 
 use Illuminate\Database\Query\Builder;
 
-/**
- * @codeCoverageIgnore
- */
 trait CompilesOracleExpressions
 {
     use CompilesExpressions;

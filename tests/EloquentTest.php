@@ -21,14 +21,15 @@ class EloquentTest extends TestCase
 
     public function testWithRecursiveExpression()
     {
-        $query = User::where('id', 3)
+        $query = User::select('id', 'parent_id', 'followers', 'created_at', 'updated_at')
+            ->where('id', 3)
             ->unionAll(
-                User::select('users.*')
+                User::select('users.id', 'users.parent_id', 'users.followers', 'users.created_at', 'users.updated_at')
                     ->join('ancestors', 'ancestors.parent_id', '=', 'users.id')
             );
 
         $users = User::from('ancestors')
-            ->withRecursiveExpression('ancestors', $query)
+            ->withRecursiveExpression('ancestors', $query, ['id', 'parent_id', 'followers', 'created_at', 'updated_at'])
             ->orderBy('id')
             ->get();
 
@@ -96,7 +97,7 @@ class EloquentTest extends TestCase
 
     public function testUpdate()
     {
-        if (in_array($this->connection, ['mariadb', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'oracle', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -111,7 +112,7 @@ class EloquentTest extends TestCase
 
     public function testUpdateWithJoin()
     {
-        if (in_array($this->connection, ['mariadb', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'oracle', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -126,7 +127,7 @@ class EloquentTest extends TestCase
 
     public function testUpdateWithLimit()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'oracle', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -143,7 +144,7 @@ class EloquentTest extends TestCase
 
     public function testDelete()
     {
-        if (in_array($this->connection, ['mariadb', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'oracle', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -156,7 +157,7 @@ class EloquentTest extends TestCase
 
     public function testDeleteWithJoin()
     {
-        if (in_array($this->connection, ['mariadb', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'oracle', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -170,7 +171,7 @@ class EloquentTest extends TestCase
 
     public function testDeleteWithLimit()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'oracle', 'firebird'])) {
             $this->markTestSkipped();
         }
 
