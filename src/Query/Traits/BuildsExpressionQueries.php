@@ -7,6 +7,7 @@ use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Database\Query\Processors\Processor;
 use RuntimeException;
 use Staudenmeir\LaravelCte\Query\Grammars\FirebirdGrammar;
+use Staudenmeir\LaravelCte\Query\Grammars\MariaDbGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\MySqlGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\OracleGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\PostgresGrammar;
@@ -74,6 +75,7 @@ trait BuildsExpressionQueries
 
         $grammar = match ($driver) {
             'mysql' => new MySqlGrammar(),
+            'mariadb' => new MariaDbGrammar(),
             'pgsql' => new PostgresGrammar(),
             'sqlite' => new SQLiteGrammar(),
             'sqlsrv' => new SqlServerGrammar(),
@@ -83,12 +85,7 @@ trait BuildsExpressionQueries
             default => throw new RuntimeException('This database is not supported.'), // @codeCoverageIgnore
         };
 
-        // TODO[L11]
-        if (method_exists($grammar, 'setConnection')) {
-            $grammar->setConnection($connection);
-        }
-
-        return $grammar;
+        return $grammar->setConnection($connection);
     }
 
     /**

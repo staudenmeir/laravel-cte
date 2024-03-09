@@ -6,6 +6,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Connectors\ConnectionFactory as Base;
 use InvalidArgumentException;
 use Staudenmeir\LaravelCte\Connections\FirebirdConnection;
+use Staudenmeir\LaravelCte\Connections\MariaDbConnection;
 use Staudenmeir\LaravelCte\Connections\MySqlConnection;
 use Staudenmeir\LaravelCte\Connections\OracleConnection;
 use Staudenmeir\LaravelCte\Connections\PostgresConnection;
@@ -37,6 +38,7 @@ class ConnectionFactory extends Base
 
         return match ($driver) {
             'mysql' => new MySqlConnection($connection, $database, $prefix, $config),
+            'mariadb' => new MariaDbConnection($connection, $database, $prefix, $config),
             'pgsql' => new PostgresConnection($connection, $database, $prefix, $config),
             'sqlite' => new SQLiteConnection($connection, $database, $prefix, $config),
             'sqlsrv' => new SqlServerConnection($connection, $database, $prefix, $config),

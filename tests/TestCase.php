@@ -77,6 +77,7 @@ abstract class TestCase extends Base
 
     protected function getPackageProviders($app)
     {
+        return []; // TODO[L11]
         return [SingleStoreProvider::class, FirebirdServiceProvider::class];
     }
 }

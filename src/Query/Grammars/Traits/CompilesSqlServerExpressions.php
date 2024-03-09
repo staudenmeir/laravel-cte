@@ -26,18 +26,6 @@ trait CompilesSqlServerExpressions
     }
 
     /**
-     * Compile a common table expression for a query. TODO[L11]
-     *
-     * @param string $sql
-     * @param \Illuminate\Database\Query\Builder $query
-     * @return string
-     */
-    protected function compileTableExpression($sql, $query)
-    {
-        return $this->compileExpressions($query, $query->expressions).' '.parent::compileTableExpression($sql, $query);
-    }
-
-    /**
      * Get the "recursive" keyword.
      *
      * @param array $expressions
