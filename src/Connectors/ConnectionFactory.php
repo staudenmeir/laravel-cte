@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use Staudenmeir\LaravelCte\Connections\FirebirdConnection;
 use Staudenmeir\LaravelCte\Connections\MariaDbConnection;
 use Staudenmeir\LaravelCte\Connections\MySqlConnection;
-use Staudenmeir\LaravelCte\Connections\OracleConnection;
 use Staudenmeir\LaravelCte\Connections\PostgresConnection;
 use Staudenmeir\LaravelCte\Connections\SQLiteConnection;
 use Staudenmeir\LaravelCte\Connections\SingleStoreConnection;
@@ -42,7 +41,6 @@ class ConnectionFactory extends Base
             'pgsql' => new PostgresConnection($connection, $database, $prefix, $config),
             'sqlite' => new SQLiteConnection($connection, $database, $prefix, $config),
             'sqlsrv' => new SqlServerConnection($connection, $database, $prefix, $config),
-            'oracle' => new OracleConnection($connection, $database, $prefix, $config),
             'singlestore' => new SingleStoreConnection($connection, $database, $prefix, $config),
             'firebird' => new FirebirdConnection($connection, $database, $prefix, $config),
             default => throw new InvalidArgumentException("Unsupported driver [{$driver}]"),
