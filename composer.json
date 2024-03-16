@@ -16,6 +16,7 @@
         "orchestra/testbench": "^9.0",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.5",
+        "singlestoredb/singlestoredb-laravel": "^1.5.4",
         "yajra/laravel-oci8": "^11.0"
     },
     "autoload": {
