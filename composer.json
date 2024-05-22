@@ -17,7 +17,7 @@
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^11.0",
         "singlestoredb/singlestoredb-laravel": "^1.5.4",
-        "yajra/laravel-oci8": "11.2.1"
+        "yajra/laravel-oci8": "^11.2.4"
     },
     "autoload": {
         "psr-4": {
