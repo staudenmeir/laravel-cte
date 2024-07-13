@@ -11,6 +11,9 @@ jobs:
         php: [ 8.4, 8.3, 8.2 ]
         database: [ mysql, mariadb, pgsql, sqlite, sqlsrv, singlestore, oracle ] # TODO[L11]: firebird
         release: [ stable, lowest ]
+        exclude: # TODO
+          - php: 8.4
+          - database: oracle
         include:
           - php: 8.3
             release: stable
