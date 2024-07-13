@@ -53,7 +53,7 @@ trait BuildsExpressionQueries
      * @param \Illuminate\Database\Query\Processors\Processor|null $processor
      * @return void
      */
-    public function __construct(Connection $connection, Grammar $grammar = null, Processor $processor = null)
+    public function __construct(Connection $connection, ?Grammar $grammar = null, ?Processor $processor = null)
     {
         $grammar = $grammar ?: $connection->withTablePrefix($this->getQueryGrammar($connection));
         $processor = $processor ?: $connection->getPostProcessor();
@@ -99,7 +99,7 @@ trait BuildsExpressionQueries
      * @param array|null $cycle
      * @return $this
      */
-    public function withExpression($name, $query, array $columns = null, $recursive = false, $materialized = null, array $cycle = null)
+    public function withExpression($name, $query, ?array $columns = null, $recursive = false, $materialized = null, ?array $cycle = null)
     {
         [$query, $bindings] = $this->createSub($query);
 
@@ -119,7 +119,7 @@ trait BuildsExpressionQueries
      * @param array|null $cycle
      * @return $this
      */
-    public function withRecursiveExpression($name, $query, $columns = null, array $cycle = null)
+    public function withRecursiveExpression($name, $query, $columns = null, ?array $cycle = null)
     {
         return $this->withExpression($name, $query, $columns, true, null, $cycle);
     }
