@@ -11,7 +11,7 @@ class EloquentTest extends TestCase
 {
     public function testWithExpression()
     {
-        $users = User::withExpression('u', User::where('id', '>', 1))
+        $users = User::query()->withExpression('u', User::where('id', '>', 1))
             ->from('u')
             ->orderBy('id')
             ->get();
@@ -89,7 +89,7 @@ class EloquentTest extends TestCase
             ->selectRaw('1 as views')
             ->where('id', '>', 1);
 
-        Post::withExpression('u', $query)
+        Post::query()->withExpression('u', $query)
           ->insertUsing(['id', 'user_id', 'views'], User::from('u'));
 
         $this->assertEquals([1, 2, 2, 3], Post::orderBy('user_id')->pluck('user_id')->all());
@@ -101,7 +101,7 @@ class EloquentTest extends TestCase
             $this->markTestSkipped();
         }
 
-        Post::withExpression('u', User::where('id', '>', 1))
+        Post::query()->withExpression('u', User::where('id', '>', 1))
           ->update([
               'views' => new Expression('(select count(*) from u)'),
               'updated_at' => new DateTime(),
@@ -116,7 +116,7 @@ class EloquentTest extends TestCase
             $this->markTestSkipped();
         }
 
-        Post::withExpression('u', User::where('id', '>', 1))
+        Post::query()->withExpression('u', User::where('id', '>', 1))
           ->join('u', 'u.id', '=', 'posts.user_id')
           ->update([
               'views' => 1
@@ -131,7 +131,7 @@ class EloquentTest extends TestCase
             $this->markTestSkipped();
         }
 
-        Post::withExpression('u', User::where('id', '>', 0))
+        Post::query()->withExpression('u', User::where('id', '>', 0))
           ->whereIn('user_id', User::from('u')->select('id'))
           ->orderBy('id')
           ->limit(1)
@@ -148,7 +148,7 @@ class EloquentTest extends TestCase
             $this->markTestSkipped();
         }
 
-        Post::withExpression('u', User::where('id', '>', 1))
+        Post::query()->withExpression('u', User::where('id', '>', 1))
           ->whereIn('user_id', User::from('u')->select('id'))
           ->delete();
 
@@ -161,7 +161,7 @@ class EloquentTest extends TestCase
             $this->markTestSkipped();
         }
 
-        Post::withExpression('u', User::where('id', '>', 1))
+        Post::query()->withExpression('u', User::where('id', '>', 1))
           ->join('users', 'users.id', '=', 'posts.user_id')
           ->whereIn('user_id', User::from('u')->select('id'))
           ->delete();
@@ -176,9 +176,9 @@ class EloquentTest extends TestCase
         }
 
         if ($this->connection === 'singlestore') {
-            $query = Post::withExpression('u', User::where('id', '<', 2));
+            $query = Post::query()->withExpression('u', User::where('id', '<', 2));
         } else {
-            $query = Post::withExpression('u', User::where('id', '>', 0))
+            $query = Post::query()->withExpression('u', User::where('id', '>', 0))
                          ->orderBy('id');
         }
 

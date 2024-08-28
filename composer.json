@@ -14,6 +14,7 @@
     },
     "require-dev": {
         "harrygulliford/laravel-firebird": "dev-laravel-11.x",
+        "larastan/larastan": "^2.9",
         "orchestra/testbench": "^9.0",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^11.0",
