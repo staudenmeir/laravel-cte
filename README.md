@@ -1,6 +1,6 @@
 # Laravel CTE
 
-[![CI](https://github.com/staudenmeir/laravel-cte/actions/workflows/ci.yml/badge.svg)](https://github.com/staudenmeir/laravel-cte/actions/workflows/ci.yml)
+[![CI](https://github.com/staudenmeir/laravel-cte/actions/workflows/ci.yml/badge.svg)](https://github.com/staudenmeir/laravel-cte/actions/workflows/ci.yml?query=branch%3Amain)
 [![Code Coverage](https://codecov.io/gh/staudenmeir/laravel-cte/graph/badge.svg?token=JWHOOEYYGG)](https://codecov.io/gh/staudenmeir/laravel-cte)
 [![Latest Stable Version](https://poser.pugx.org/staudenmeir/laravel-cte/v/stable)](https://packagist.org/packages/staudenmeir/laravel-cte)
 [![Total Downloads](https://poser.pugx.org/staudenmeir/laravel-cte/downloads)](https://packagist.org/packages/staudenmeir/laravel-cte/stats)
