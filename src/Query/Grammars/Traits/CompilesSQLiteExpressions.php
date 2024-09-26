@@ -56,7 +56,9 @@ trait CompilesSQLiteExpressions
      * Get the bindings for an update statement.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array<string, mixed> $bindings
+     * @param array{expressions: list<mixed>, select: list<mixed>, from: list<mixed>, join: list<mixed>,
+     *      where: list<mixed>, having: list<mixed>, order: list<mixed>, union: list<mixed>,
+     *      unionOrder: list<mixed>} $bindings
      * @param array<string, mixed> $values
      * @return list<mixed>
      */

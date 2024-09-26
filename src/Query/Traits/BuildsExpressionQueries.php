@@ -219,8 +219,13 @@ trait BuildsExpressionQueries
 
         $sql = $grammar->compileUpdate($this, $values);
 
+        /** @var array{expressions: list<mixed>, select: list<mixed>, from: list<mixed>, join: list<mixed>,
+         * where: list<mixed>, having: list<mixed>, order: list<mixed>, union: list<mixed>,
+         * unionOrder: list<mixed>} $bindings */
+        $bindings = $this->bindings;
+
         return $this->connection->update($sql, $this->cleanBindings(
-            $grammar->getBindingsForUpdate($this, $this->bindings, $values)
+            $grammar->getBindingsForUpdate($this, $bindings, $values)
         ));
     }
 
