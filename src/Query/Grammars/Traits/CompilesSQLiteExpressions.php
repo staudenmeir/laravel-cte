@@ -25,7 +25,8 @@ trait CompilesSQLiteExpressions
         $builderClasses = [CteBuilder::class, 'Staudenmeir\EloquentEagerLimitXLaravelCte\Query\Builder'];
 
         for ($i = 6; $i <= 9; $i++) {
-            if (in_array($backtrace[$i]['class'], $builderClasses) && $backtrace[$i]['function'] === 'withExpression') {
+            if (isset($backtrace[$i]['class']) && in_array($backtrace[$i]['class'], $builderClasses)
+                && $backtrace[$i]['function'] === 'withExpression') {
                 $conjunction = $union['all'] ? ' union all ' : ' union ';
 
                 return $conjunction.$union['query']->toSql();
