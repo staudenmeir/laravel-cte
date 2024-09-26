@@ -34,14 +34,14 @@ trait BuildsExpressionQueries
     /**
      * The recursion limit.
      *
-     * @var int
+     * @var int|null
      */
     public $recursionLimit;
 
     /**
      * The recursion limit for union queries.
      *
-     * @var int
+     * @var int|null
      */
     public $unionRecursionLimit;
 

@@ -15,7 +15,7 @@ trait CompilesPostgresExpressions
     /** @inheritDoc */
     public function compileUpdate(Builder $query, array $values)
     {
-        if (isset($query->joins) || isset($query->limit)) {
+        if ($query->joins || isset($query->limit)) {
             return parent::compileUpdate($query, $values);
         }
 
@@ -25,7 +25,7 @@ trait CompilesPostgresExpressions
     /** @inheritDoc */
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
     {
-        if (isset($query->joins) || isset($query->limit)) {
+        if ($query->joins || isset($query->limit)) {
             return parent::prepareBindingsForUpdate($bindings, $values);
         }
 
@@ -57,7 +57,7 @@ trait CompilesPostgresExpressions
     /** @inheritDoc */
     public function compileDelete(Builder $query)
     {
-        if (isset($query->joins) || isset($query->limit)) {
+        if ($query->joins || isset($query->limit)) {
             return parent::compileDelete($query);
         }
 
