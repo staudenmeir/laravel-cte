@@ -12,7 +12,13 @@ trait CompilesPostgresExpressions
         compileDelete as compileDeleteTrait;
     }
 
-    /** @inheritDoc */
+    /**
+     * Compile an update statement into SQL.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array<string, mixed> $values
+     * @return string
+     */
     public function compileUpdate(Builder $query, array $values)
     {
         if ($query->joins || isset($query->limit)) {
@@ -22,7 +28,14 @@ trait CompilesPostgresExpressions
         return $this->compileUpdateTrait($query, $values);
     }
 
-    /** @inheritDoc */
+    /**
+     * Get the bindings for an update statement.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array<string, mixed> $bindings
+     * @param array<string, mixed> $values
+     * @return list<mixed>
+     */
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
     {
         if ($query->joins || isset($query->limit)) {
@@ -32,7 +45,13 @@ trait CompilesPostgresExpressions
         return $this->prepareBindingsForUpdate($bindings, $values);
     }
 
-    /** @inheritDoc */
+    /**
+     * Compile an update from statement into SQL.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param list<mixed> $values
+     * @return string
+     */
     public function compileUpdateFrom(Builder $query, $values)
     {
         /** @var \Staudenmeir\LaravelCte\Query\Builder $query */
@@ -44,7 +63,13 @@ trait CompilesPostgresExpressions
                            ->trim();
     }
 
-    /** @inheritDoc */
+    /**
+     * Prepare the bindings for an update statement.
+     *
+     * @param array<string, mixed> $bindings
+     * @param list<mixed> $values
+     * @return list<mixed>
+     */
     public function prepareBindingsForUpdateFrom(array $bindings, array $values)
     {
         $values = array_merge($bindings['expressions'], $values);

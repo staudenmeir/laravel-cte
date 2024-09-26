@@ -10,7 +10,7 @@ interface ExpressionGrammar
      * Compile an insert statement using a subquery into SQL.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array $columns
+     * @param list<string|\Illuminate\Database\Query\Expression> $columns
      * @param string $sql
      * @return string
      */
@@ -20,7 +20,7 @@ interface ExpressionGrammar
      * Compile an update statement into SQL.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array $values
+     * @param array<string, mixed> $values
      * @return string
      */
     public function compileUpdate(Builder $query, array $values);
@@ -28,9 +28,9 @@ interface ExpressionGrammar
     /**
      * Prepare the bindings for an update statement.
      *
-     * @param array $bindings
-     * @param array $values
-     * @return array
+     * @param array<string, mixed> $bindings
+     * @param array<string, mixed> $values
+     * @return list<mixed>
      */
     public function prepareBindingsForUpdate(array $bindings, array $values);
 
@@ -38,9 +38,9 @@ interface ExpressionGrammar
      * Get the bindings for an update statement.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array $bindings
-     * @param array $values
-     * @return array
+     * @param array<string, mixed> $bindings
+     * @param array<string, mixed> $values
+     * @return list<mixed>
      */
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values);
 }

@@ -8,7 +8,15 @@ trait CompilesMySqlExpressions
 {
     use CompilesExpressions;
 
-    /** @inheritDoc */
+    /**
+     * Compile the cycle detection.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>,
+     *        recursive: bool, materialized: bool|null,
+     *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null} $expression
+     * @return string
+     */
     public function compileCycle(Builder $query, array $expression)
     {
         if (!$expression['cycle']) {
@@ -20,7 +28,14 @@ trait CompilesMySqlExpressions
         return " cycle $columns restrict";
     }
 
-    /** @inheritDoc */
+    /**
+     * Compile an insert statement using a subquery into SQL.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param list<string|\Illuminate\Database\Query\Expression> $columns
+     * @param string $sql
+     * @return string
+     */
     public function compileInsertUsing(Builder $query, array $columns, string $sql)
     {
         /** @var \Staudenmeir\LaravelCte\Query\Builder $query */

@@ -24,7 +24,9 @@ trait CompilesExpressions
      * Compile the common table expressions.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array $expressions
+     * @param list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>,
+     *        recursive: bool, materialized: bool|null,
+     *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}> $expressions
      * @return string
      */
     public function compileExpressions(Builder $query, array $expressions)
@@ -55,7 +57,9 @@ trait CompilesExpressions
     /**
      * Get the "recursive" keyword.
      *
-     * @param array $expressions
+     * @param list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>,
+     *        recursive: bool, materialized: bool|null,
+     *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}> $expressions
      * @return string
      */
     protected function recursiveKeyword(array $expressions)
@@ -83,7 +87,9 @@ trait CompilesExpressions
      * Compile the cycle detection.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array $expression
+     * @param array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>,
+     *        recursive: bool, materialized: bool|null,
+     *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null} $expression
      * @return string
      */
     public function compileCycle(Builder $query, array $expression)
@@ -99,7 +105,12 @@ trait CompilesExpressions
         return " cycle $columns set $markColumn using $pathColumn";
     }
 
-    /** @inheritDoc */
+    /**
+     * Compile a select query into SQL.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return string
+     */
     public function compileSelect(Builder $query)
     {
         $sql = parent::compileSelect($query);
@@ -117,7 +128,14 @@ trait CompilesExpressions
         return $sql;
     }
 
-    /** @inheritDoc */
+    /**
+     * Compile an insert statement using a subquery into SQL.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param list<string|\Illuminate\Database\Query\Expression> $columns
+     * @param string $sql
+     * @return string
+     */
     public function compileInsertUsing(Builder $query, array $columns, string $sql)
     {
         /** @var \Staudenmeir\LaravelCte\Query\Builder $query */
@@ -134,7 +152,13 @@ trait CompilesExpressions
             ->trim();
     }
 
-    /** @inheritDoc */
+    /**
+     * Compile an update statement into SQL.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array<string, mixed> $values
+     * @return string
+     */
     public function compileUpdate(Builder $query, array $values)
     {
         /** @var \Staudenmeir\LaravelCte\Query\Builder $query */
@@ -146,7 +170,13 @@ trait CompilesExpressions
             ->trim();
     }
 
-    /** @inheritDoc */
+    /**
+     * Prepare the bindings for an update statement.
+     *
+     * @param array<string, mixed> $bindings
+     * @param array<string, mixed> $values
+     * @return list<mixed>
+     */
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
         $values = array_merge($bindings['expressions'], $values);
@@ -156,7 +186,14 @@ trait CompilesExpressions
         return parent::prepareBindingsForUpdate($bindings, $values);
     }
 
-    /** @inheritDoc */
+    /**
+     * Get the bindings for an update statement.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array<string, mixed> $bindings
+     * @param array<string, mixed> $values
+     * @return list<mixed>
+     */
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
     {
         return $this->prepareBindingsForUpdate($bindings, $values);

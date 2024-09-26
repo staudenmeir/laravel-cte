@@ -20,7 +20,14 @@ trait CompilesSqlServerExpressions
         return $this->compileSelectParent($query);
     }
 
-    /** @inheritDoc */
+    /**
+     * Get the "recursive" keyword.
+     *
+     * @param list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>,
+     *        recursive: bool, materialized: bool|null,
+     *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}> $expressions
+     * @return string
+     */
     protected function recursiveKeyword(array $expressions)
     {
         return '';

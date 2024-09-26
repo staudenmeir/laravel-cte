@@ -20,14 +20,18 @@ trait BuildsExpressionQueries
     /**
      * The common table expressions.
      *
-     * @var array
+     * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>,
+     *       recursive: bool, materialized: bool|null,
+     *       cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}>
      */
     public $expressions = [];
 
     /**
      * The common table expressions for union queries.
      *
-     * @var array
+     * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>,
+     *        recursive: bool, materialized: bool|null,
+     *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}>
      */
     public $unionExpressions = [];
 
@@ -92,11 +96,11 @@ trait BuildsExpressionQueries
      * Add a common table expression to the query.
      *
      * @param string $name
-     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
-     * @param array|null $columns
+     * @param string|\Closure|\Illuminate\Database\Query\Builder $query
+     * @param list<string|\Illuminate\Database\Query\Expression>|null $columns
      * @param bool $recursive
      * @param bool|null $materialized
-     * @param array|null $cycle
+     * @param array{columns: list<string>, markColumn: string, pathColumn: string}|null $cycle
      * @return $this
      */
     public function withExpression($name, $query, ?array $columns = null, $recursive = false, $materialized = null, ?array $cycle = null)
@@ -114,9 +118,9 @@ trait BuildsExpressionQueries
      * Add a recursive common table expression to the query.
      *
      * @param string $name
-     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
-     * @param array|null $columns
-     * @param array|null $cycle
+     * @param string|\Closure|\Illuminate\Database\Query\Builder $query
+     * @param list<string|\Illuminate\Database\Query\Expression>|null $columns
+     * @param array{columns: list<string>, markColumn: string, pathColumn: string}|null $cycle
      * @return $this
      */
     public function withRecursiveExpression($name, $query, $columns = null, ?array $cycle = null)
@@ -128,11 +132,11 @@ trait BuildsExpressionQueries
      * Add a recursive common table expression with cycle detection to the query.
      *
      * @param string $name
-     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
-     * @param array|string $cycleColumns
+     * @param string|\Closure|\Illuminate\Database\Query\Builder $query
+     * @param list<string>|string $cycleColumns
      * @param string $markColumn
      * @param string $pathColumn
-     * @param array|null $columns
+     * @param list<string|\Illuminate\Database\Query\Expression>|null $columns
      * @return $this
      */
     public function withRecursiveExpressionAndCycleDetection($name, $query, $cycleColumns, $markColumn = 'is_cycle', $pathColumn = 'path', $columns = null)
@@ -150,8 +154,8 @@ trait BuildsExpressionQueries
      * Add a materialized common table expression to the query.
      *
      * @param string $name
-     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
-     * @param array|null $columns
+     * @param string|\Closure|\Illuminate\Database\Query\Builder $query
+     * @param list<string|\Illuminate\Database\Query\Expression>|null $columns
      * @return $this
      */
     public function withMaterializedExpression($name, $query, $columns = null)
@@ -163,8 +167,8 @@ trait BuildsExpressionQueries
      * Add a non-materialized common table expression to the query.
      *
      * @param string $name
-     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
-     * @param array|null $columns
+     * @param string|\Closure|\Illuminate\Database\Query\Builder $query
+     * @param list<string|\Illuminate\Database\Query\Expression>|null $columns
      * @return $this
      */
     public function withNonMaterializedExpression($name, $query, $columns = null)
@@ -200,7 +204,12 @@ trait BuildsExpressionQueries
         );
     }
 
-    /** @inheritDoc */
+    /**
+     * Update records in the database.
+     *
+     * @param array<string, mixed> $values
+     * @return int
+     */
     public function update(array $values)
     {
         $this->applyBeforeQueryCallbacks();
@@ -215,7 +224,12 @@ trait BuildsExpressionQueries
         ));
     }
 
-    /** @inheritDoc */
+    /**
+     * Update records in a PostgreSQL database using the update from syntax.
+     *
+     * @param array<string, mixed> $values
+     * @return int
+     */
     public function updateFrom(array $values)
     {
         $this->applyBeforeQueryCallbacks();
