@@ -99,12 +99,7 @@ trait CompilesExpressions
         return " cycle $columns set $markColumn using $pathColumn";
     }
 
-    /**
-     * Compile a select query into SQL.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileSelect(Builder $query)
     {
         $sql = parent::compileSelect($query);
@@ -122,16 +117,11 @@ trait CompilesExpressions
         return $sql;
     }
 
-    /**
-     * Compile an insert statement using a subquery into SQL.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $columns
-     * @param string $sql
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileInsertUsing(Builder $query, array $columns, string $sql)
     {
+        /** @var \Staudenmeir\LaravelCte\Query\Builder $query */
+
         $expressions = $this->compileExpressions($query, $query->expressions);
 
         $recursionLimit = $this->compileRecursionLimit($query, $query->recursionLimit);
@@ -144,15 +134,11 @@ trait CompilesExpressions
             ->trim();
     }
 
-    /**
-     * Compile an update statement into SQL.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $values
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileUpdate(Builder $query, array $values)
     {
+        /** @var \Staudenmeir\LaravelCte\Query\Builder $query */
+
         $compiled = parent::compileUpdate($query, $values);
 
         return (string) Str::of($compiled)
@@ -160,13 +146,7 @@ trait CompilesExpressions
             ->trim();
     }
 
-    /**
-     * Prepare the bindings for an update statement.
-     *
-     * @param array $bindings
-     * @param array $values
-     * @return array
-     */
+    /** @inheritDoc */
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
         $values = array_merge($bindings['expressions'], $values);
@@ -176,14 +156,7 @@ trait CompilesExpressions
         return parent::prepareBindingsForUpdate($bindings, $values);
     }
 
-    /**
-     * Get the bindings for an update statement.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $bindings
-     * @param array $values
-     * @return array
-     */
+    /** @inheritDoc */
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
     {
         return $this->prepareBindingsForUpdate($bindings, $values);
@@ -197,6 +170,8 @@ trait CompilesExpressions
      */
     public function compileDelete(Builder $query)
     {
+        /** @var \Staudenmeir\LaravelCte\Query\Builder $query */
+
         $compiled = parent::compileDelete($query);
 
         return (string) Str::of($compiled)

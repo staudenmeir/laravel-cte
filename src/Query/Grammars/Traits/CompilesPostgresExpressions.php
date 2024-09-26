@@ -12,13 +12,7 @@ trait CompilesPostgresExpressions
         compileDelete as compileDeleteTrait;
     }
 
-    /**
-     * Compile an update statement into SQL.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $values
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileUpdate(Builder $query, array $values)
     {
         if (isset($query->joins) || isset($query->limit)) {
@@ -28,14 +22,7 @@ trait CompilesPostgresExpressions
         return $this->compileUpdateTrait($query, $values);
     }
 
-    /**
-     * Get the bindings for an update statement.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $bindings
-     * @param array $values
-     * @return array
-     */
+    /** @inheritDoc */
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
     {
         if (isset($query->joins) || isset($query->limit)) {
@@ -45,15 +32,11 @@ trait CompilesPostgresExpressions
         return $this->prepareBindingsForUpdate($bindings, $values);
     }
 
-    /**
-     * Compile an update from statement into SQL.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $values
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileUpdateFrom(Builder $query, $values)
     {
+        /** @var \Staudenmeir\LaravelCte\Query\Builder $query */
+
         $compiled = parent::compileUpdateFrom($query, $values);
 
         return (string) Str::of($compiled)
@@ -61,13 +44,7 @@ trait CompilesPostgresExpressions
                            ->trim();
     }
 
-    /**
-     * Prepare the bindings for an update statement.
-     *
-     * @param array $bindings
-     * @param array $values
-     * @return array
-     */
+    /** @inheritDoc */
     public function prepareBindingsForUpdateFrom(array $bindings, array $values)
     {
         $values = array_merge($bindings['expressions'], $values);
@@ -77,12 +54,7 @@ trait CompilesPostgresExpressions
         return parent::prepareBindingsForUpdateFrom($bindings, $values);
     }
 
-    /**
-     * Compile a delete statement into SQL.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileDelete(Builder $query)
     {
         if (isset($query->joins) || isset($query->limit)) {

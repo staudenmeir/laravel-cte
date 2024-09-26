@@ -12,12 +12,7 @@ trait CompilesSQLiteExpressions
         compileDelete as compileDeleteTrait;
     }
 
-    /**
-     * Compile a single union statement.
-     *
-     * @param array $union
-     * @return string
-     */
+    /** @inheritDoc */
     protected function compileUnion(array $union)
     {
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10);
@@ -35,13 +30,7 @@ trait CompilesSQLiteExpressions
         return parent::compileUnion($union);
     }
 
-    /**
-     * Compile an update statement into SQL.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $values
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileUpdate(Builder $query, array $values)
     {
         if (isset($query->joins) || isset($query->limit)) {
@@ -51,14 +40,7 @@ trait CompilesSQLiteExpressions
         return $this->compileUpdateTrait($query, $values);
     }
 
-    /**
-     * Get the bindings for an update statement.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $bindings
-     * @param array $values
-     * @return array
-     */
+    /** @inheritDoc */
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
     {
         if (isset($query->joins) || isset($query->limit)) {
@@ -68,12 +50,7 @@ trait CompilesSQLiteExpressions
         return $this->prepareBindingsForUpdate($bindings, $values);
     }
 
-    /**
-     * Compile a delete statement into SQL.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileDelete(Builder $query)
     {
         if (isset($query->joins) || isset($query->limit)) {

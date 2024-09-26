@@ -7,11 +7,7 @@ use Staudenmeir\LaravelCte\Connectors\ConnectionFactory;
 
 class DatabaseServiceProvider extends ServiceProvider
 {
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
+    /** @inheritDoc */
     public function register()
     {
         $this->app->singleton('db.factory', function ($app) {

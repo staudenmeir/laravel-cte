@@ -185,13 +185,7 @@ trait BuildsExpressionQueries
         return $this;
     }
 
-    /**
-     * Insert new records into the table using a subquery.
-     *
-     * @param array $columns
-     * @param \Closure|\Illuminate\Database\Query\Builder|string $query
-     * @return int
-     */
+    /** @inheritDoc */
     public function insertUsing(array $columns, $query)
     {
         $this->applyBeforeQueryCallbacks();
@@ -206,37 +200,33 @@ trait BuildsExpressionQueries
         );
     }
 
-    /**
-     * Update records in the database.
-     *
-     * @param array $values
-     * @return int
-     */
+    /** @inheritDoc */
     public function update(array $values)
     {
         $this->applyBeforeQueryCallbacks();
 
-        $sql = $this->grammar->compileUpdate($this, $values);
+        /** @var \Staudenmeir\LaravelCte\Query\Grammars\ExpressionGrammar $grammar */
+        $grammar = $this->grammar;
+
+        $sql = $grammar->compileUpdate($this, $values);
 
         return $this->connection->update($sql, $this->cleanBindings(
-            $this->grammar->getBindingsForUpdate($this, $this->bindings, $values)
+            $grammar->getBindingsForUpdate($this, $this->bindings, $values)
         ));
     }
 
-    /**
-     * Update records in a PostgreSQL database using the update from syntax.
-     *
-     * @param array $values
-     * @return int
-     */
+    /** @inheritDoc */
     public function updateFrom(array $values)
     {
         $this->applyBeforeQueryCallbacks();
 
-        $sql = $this->grammar->compileUpdateFrom($this, $values);
+        /** @var \Illuminate\Database\Query\Grammars\PostgresGrammar $grammar */
+        $grammar = $this->grammar;
+
+        $sql = $grammar->compileUpdateFrom($this, $values);
 
         return $this->connection->update($sql, $this->cleanBindings(
-            $this->grammar->prepareBindingsForUpdateFrom($this->bindings, $values)
+            $grammar->prepareBindingsForUpdateFrom($this->bindings, $values)
         ));
     }
 }

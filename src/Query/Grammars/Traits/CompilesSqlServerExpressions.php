@@ -10,12 +10,7 @@ trait CompilesSqlServerExpressions
         compileSelect as compileSelectParent;
     }
 
-    /**
-     * Compile a select query into SQL.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileSelect(Builder $query)
     {
         if ($query->offset && empty($query->orders)) {
@@ -25,12 +20,7 @@ trait CompilesSqlServerExpressions
         return $this->compileSelectParent($query);
     }
 
-    /**
-     * Get the "recursive" keyword.
-     *
-     * @param array $expressions
-     * @return string
-     */
+    /** @inheritDoc */
     protected function recursiveKeyword(array $expressions)
     {
         return '';

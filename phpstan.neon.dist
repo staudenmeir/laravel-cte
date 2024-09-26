@@ -1,7 +1,6 @@
 includes:
     - ./vendor/larastan/larastan/extension.neon
 parameters:
-    level: 1
+    level: 3
     paths:
         - src
-        - tests
