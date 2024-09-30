@@ -189,7 +189,13 @@ trait BuildsExpressionQueries
         return $this;
     }
 
-    /** @inheritDoc */
+    /**
+     * Insert new records into the table using a subquery.
+     *
+     * @param list<string|\Illuminate\Database\Query\Expression> $columns
+     * @param string|\Closure|\Illuminate\Database\Eloquent\Builder<*>|\Illuminate\Database\Query\Builder $query
+     * @return int
+     */
     public function insertUsing(array $columns, $query)
     {
         $this->applyBeforeQueryCallbacks();
