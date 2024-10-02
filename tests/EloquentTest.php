@@ -11,7 +11,8 @@ class EloquentTest extends TestCase
 {
     public function testWithExpression()
     {
-        $users = User::query()->withExpression('u', User::where('id', '>', 1))
+        $users = User::query()
+            ->withExpression('u', User::where('id', '>', 1))
             ->from('u')
             ->orderBy('id')
             ->get();

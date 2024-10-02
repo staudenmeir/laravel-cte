@@ -7,11 +7,7 @@ use Staudenmeir\LaravelCte\Query\SingleStoreBuilder;
 
 class SingleStoreConnection extends Connection
 {
-    /**
-     * Get a new query builder instance.
-     *
-     * @return \Illuminate\Database\Query\Builder
-     */
+    /** @inheritDoc */
     public function query()
     {
         return new SingleStoreBuilder($this);

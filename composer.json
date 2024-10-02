@@ -14,9 +14,8 @@
     },
     "require-dev": {
         "harrygulliford/laravel-firebird": "dev-laravel-11.x",
-        "larastan/larastan": "^2.9",
         "orchestra/testbench": "^9.0",
-        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan": "^1.12",
         "phpunit/phpunit": "^11.0",
         "singlestoredb/singlestoredb-laravel": "^1.5.4",
         "yajra/laravel-oci8": "^11.2.4"

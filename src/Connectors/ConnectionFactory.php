@@ -22,7 +22,7 @@ class ConnectionFactory extends Base
      * @param \PDO|\Closure $connection
      * @param string $database
      * @param string $prefix
-     * @param array $config
+     * @param array<array-key, mixed> $config
      * @return \Illuminate\Database\Connection
      *
      * @throws \InvalidArgumentException

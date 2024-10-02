@@ -16,12 +16,12 @@ trait CompilesPostgresExpressions
      * Compile an update statement into SQL.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array $values
+     * @param array<string, mixed> $values
      * @return string
      */
     public function compileUpdate(Builder $query, array $values)
     {
-        if (isset($query->joins) || isset($query->limit)) {
+        if ($query->joins || isset($query->limit)) {
             return parent::compileUpdate($query, $values);
         }
 
@@ -32,13 +32,15 @@ trait CompilesPostgresExpressions
      * Get the bindings for an update statement.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array $bindings
-     * @param array $values
-     * @return array
+     * @param array{expressions: list<mixed>, select: list<mixed>, from: list<mixed>, join: list<mixed>,
+     *      where: list<mixed>, having: list<mixed>, order: list<mixed>, union: list<mixed>,
+     *      unionOrder: list<mixed>} $bindings
+     * @param array<string, mixed> $values
+     * @return list<mixed>
      */
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
     {
-        if (isset($query->joins) || isset($query->limit)) {
+        if ($query->joins || isset($query->limit)) {
             return parent::prepareBindingsForUpdate($bindings, $values);
         }
 
@@ -49,11 +51,13 @@ trait CompilesPostgresExpressions
      * Compile an update from statement into SQL.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array $values
+     * @param list<mixed> $values
      * @return string
      */
     public function compileUpdateFrom(Builder $query, $values)
     {
+        /** @var \Staudenmeir\LaravelCte\Query\Builder $query */
+
         $compiled = parent::compileUpdateFrom($query, $values);
 
         return (string) Str::of($compiled)
@@ -64,9 +68,11 @@ trait CompilesPostgresExpressions
     /**
      * Prepare the bindings for an update statement.
      *
-     * @param array $bindings
-     * @param array $values
-     * @return array
+     * @param array{expressions: list<mixed>, select: list<mixed>, from: list<mixed>, join: list<mixed>,
+     *      where: list<mixed>, having: list<mixed>, order: list<mixed>, union: list<mixed>,
+     *      unionOrder: list<mixed>} $bindings
+     * @param list<mixed> $values
+     * @return list<mixed>
      */
     public function prepareBindingsForUpdateFrom(array $bindings, array $values)
     {
@@ -77,15 +83,10 @@ trait CompilesPostgresExpressions
         return parent::prepareBindingsForUpdateFrom($bindings, $values);
     }
 
-    /**
-     * Compile a delete statement into SQL.
-     *
-     * @param \Illuminate\Database\Query\Builder $query
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileDelete(Builder $query)
     {
-        if (isset($query->joins) || isset($query->limit)) {
+        if ($query->joins || isset($query->limit)) {
             return parent::compileDelete($query);
         }
 

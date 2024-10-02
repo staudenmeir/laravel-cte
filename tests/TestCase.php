@@ -33,6 +33,7 @@ abstract class TestCase extends Base
             $table->timestamps();
 
             if ($this->connection === 'singlestore') {
+                /** @var \SingleStore\Laravel\Schema\Blueprint $table */
                 $table->shardKey('id');
             }
         });
@@ -44,6 +45,7 @@ abstract class TestCase extends Base
             $table->timestamps();
 
             if ($this->connection === 'singlestore') {
+                /** @var \SingleStore\Laravel\Schema\Blueprint $table */
                 $table->shardKey('id');
             }
         });
