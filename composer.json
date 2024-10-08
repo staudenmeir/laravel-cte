@@ -13,7 +13,7 @@
         "illuminate/database": "^11.0"
     },
     "require-dev": {
-        "harrygulliford/laravel-firebird": "dev-laravel-11.x",
+        "harrygulliford/laravel-firebird": "^3.3",
         "orchestra/testbench": "^9.0",
         "phpstan/phpstan": "^1.12",
         "phpunit/phpunit": "^11.0",
