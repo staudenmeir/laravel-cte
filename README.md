@@ -37,8 +37,8 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 | 11.x    | 1.11    |
 | 10.x    | 1.9     |
 | 9.x     | 1.6     |
-| 8.x     | 1.5     |
-| 7.x     | 1.4     |
+| 8.x     | 1.4     |
+| 7.x     | 1.3     |
 | 6.x     | 1.2     |
 | 5.8     | 1.1     |
 | 5.5–5.7 | 1.0     |
