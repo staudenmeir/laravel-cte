@@ -36,7 +36,7 @@ trait CompilesPostgresExpressions
      *      where: list<mixed>, having: list<mixed>, order: list<mixed>, union: list<mixed>,
      *      unionOrder: list<mixed>} $bindings
      * @param array<string, mixed> $values
-     * @return list<mixed>
+     * @return array<int, mixed>
      */
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
     {
@@ -72,7 +72,7 @@ trait CompilesPostgresExpressions
      *      where: list<mixed>, having: list<mixed>, order: list<mixed>, union: list<mixed>,
      *      unionOrder: list<mixed>} $bindings
      * @param list<mixed> $values
-     * @return list<mixed>
+     * @return array<int, mixed>
      */
     public function prepareBindingsForUpdateFrom(array $bindings, array $values)
     {
