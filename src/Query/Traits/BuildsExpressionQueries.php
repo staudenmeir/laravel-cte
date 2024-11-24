@@ -20,7 +20,7 @@ trait BuildsExpressionQueries
     /**
      * The common table expressions.
      *
-     * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>,
+     * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>|null,
      *       recursive: bool, materialized: bool|null,
      *       cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}>
      */
@@ -29,7 +29,7 @@ trait BuildsExpressionQueries
     /**
      * The common table expressions for union queries.
      *
-     * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>,
+     * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>|null,
      *        recursive: bool, materialized: bool|null,
      *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}>
      */
@@ -105,9 +105,16 @@ trait BuildsExpressionQueries
      */
     public function withExpression($name, $query, ?array $columns = null, $recursive = false, $materialized = null, ?array $cycle = null)
     {
+        /** @var string $query */
         [$query, $bindings] = $this->createSub($query);
 
-        $this->{$this->unions ? 'unionExpressions' : 'expressions'}[] = compact('name', 'query', 'columns', 'recursive', 'materialized', 'cycle');
+        $expression = compact('name', 'query', 'columns', 'recursive', 'materialized', 'cycle');
+
+        if ($this->unions) {
+            $this->unionExpressions[] = $expression;
+        } else {
+            $this->expressions[] = $expression;
+        }
 
         $this->addBinding($bindings, 'expressions');
 
@@ -200,9 +207,14 @@ trait BuildsExpressionQueries
     {
         $this->applyBeforeQueryCallbacks();
 
+        /** @var array<int, mixed> $expressionBindings */
+        $expressionBindings = $this->bindings['expressions'];
+
+        /** @var string $sql */
+        /** @var array<int, mixed> $bindings */
         [$sql, $bindings] = $this->createSub($query);
 
-        $bindings = array_merge($this->bindings['expressions'], $bindings);
+        $bindings = array_merge($expressionBindings, $bindings);
 
         return $this->connection->affectingStatement(
             $this->grammar->compileInsertUsing($this, $columns, $sql),

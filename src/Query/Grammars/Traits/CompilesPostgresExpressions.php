@@ -41,10 +41,16 @@ trait CompilesPostgresExpressions
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
     {
         if ($query->joins || isset($query->limit)) {
-            return parent::prepareBindingsForUpdate($bindings, $values);
+            /** @var array<int, mixed> $bindings */
+            $bindings = parent::prepareBindingsForUpdate($bindings, $values);
+
+            return $bindings;
         }
 
-        return $this->prepareBindingsForUpdate($bindings, $values);
+        /** @var array<int, mixed> $bindings */
+        $bindings = $this->prepareBindingsForUpdate($bindings, $values);
+
+        return $bindings;
     }
 
     /**
@@ -80,7 +86,10 @@ trait CompilesPostgresExpressions
 
         unset($bindings['expressions']);
 
-        return parent::prepareBindingsForUpdateFrom($bindings, $values);
+        /** @var array<int, mixed> $bindings */
+        $bindings = parent::prepareBindingsForUpdateFrom($bindings, $values);
+
+        return $bindings;
     }
 
     /** @inheritDoc */
