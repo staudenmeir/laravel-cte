@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/staudenmeir/laravel-cte/actions/workflows/ci.yml/badge.svg)](https://github.com/staudenmeir/laravel-cte/actions/workflows/ci.yml?query=branch%3Amain)
 [![Code Coverage](https://codecov.io/gh/staudenmeir/laravel-cte/graph/badge.svg?token=JWHOOEYYGG)](https://codecov.io/gh/staudenmeir/laravel-cte)
-[![PHPStan](https://img.shields.io/badge/PHPStan-level%209-brightgreen.svg?style=flat)](https://github.com/staudenmeir/laravel-cte/actions/workflows/static-analysis.yml?query=branch%3Amain)
+[![PHPStan](https://img.shields.io/badge/PHPStan-level%2010-brightgreen.svg?style=flat)](https://github.com/staudenmeir/laravel-cte/actions/workflows/static-analysis.yml?query=branch%3Amain)
 [![Latest Stable Version](https://poser.pugx.org/staudenmeir/laravel-cte/v/stable)](https://packagist.org/packages/staudenmeir/laravel-cte)
 [![Total Downloads](https://poser.pugx.org/staudenmeir/laravel-cte/downloads)](https://packagist.org/packages/staudenmeir/laravel-cte/stats)
 [![License](https://poser.pugx.org/staudenmeir/laravel-cte/license)](https://github.com/staudenmeir/laravel-cte/blob/main/LICENSE)

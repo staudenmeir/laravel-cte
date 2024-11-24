@@ -29,6 +29,7 @@ class ConnectionFactory extends Base
      */
     protected function createConnection($driver, $connection, $database, $prefix = '', array $config = [])
     {
+        /** @var (\Closure(\PDO|\Closure, string, string, array<array-key, mixed>): \Illuminate\Database\Connection)|null $resolver */
         $resolver = Connection::getResolver($driver);
 
         if (!in_array($driver, ['singlestore', 'firebird']) && $resolver) {

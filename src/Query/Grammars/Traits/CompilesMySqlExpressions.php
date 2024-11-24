@@ -12,7 +12,7 @@ trait CompilesMySqlExpressions
      * Compile the cycle detection.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>,
+     * @param array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>|null,
      *        recursive: bool, materialized: bool|null,
      *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null} $expression
      * @return string

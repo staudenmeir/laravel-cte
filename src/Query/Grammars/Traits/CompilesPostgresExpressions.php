@@ -36,15 +36,21 @@ trait CompilesPostgresExpressions
      *      where: list<mixed>, having: list<mixed>, order: list<mixed>, union: list<mixed>,
      *      unionOrder: list<mixed>} $bindings
      * @param array<string, mixed> $values
-     * @return list<mixed>
+     * @return array<int, mixed>
      */
     public function getBindingsForUpdate(Builder $query, array $bindings, array $values)
     {
         if ($query->joins || isset($query->limit)) {
-            return parent::prepareBindingsForUpdate($bindings, $values);
+            /** @var array<int, mixed> $bindings */
+            $bindings = parent::prepareBindingsForUpdate($bindings, $values);
+
+            return $bindings;
         }
 
-        return $this->prepareBindingsForUpdate($bindings, $values);
+        /** @var array<int, mixed> $bindings */
+        $bindings = $this->prepareBindingsForUpdate($bindings, $values);
+
+        return $bindings;
     }
 
     /**
@@ -72,7 +78,7 @@ trait CompilesPostgresExpressions
      *      where: list<mixed>, having: list<mixed>, order: list<mixed>, union: list<mixed>,
      *      unionOrder: list<mixed>} $bindings
      * @param list<mixed> $values
-     * @return list<mixed>
+     * @return array<int, mixed>
      */
     public function prepareBindingsForUpdateFrom(array $bindings, array $values)
     {
@@ -80,7 +86,10 @@ trait CompilesPostgresExpressions
 
         unset($bindings['expressions']);
 
-        return parent::prepareBindingsForUpdateFrom($bindings, $values);
+        /** @var array<int, mixed> $bindings */
+        $bindings = parent::prepareBindingsForUpdateFrom($bindings, $values);
+
+        return $bindings;
     }
 
     /** @inheritDoc */

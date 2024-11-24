@@ -7,6 +7,9 @@ use Staudenmeir\LaravelCte\Query\FirebirdBuilder;
 use Staudenmeir\LaravelCte\Query\OracleBuilder;
 use Staudenmeir\LaravelCte\Query\SingleStoreBuilder;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait QueriesExpressions
 {
     /**
