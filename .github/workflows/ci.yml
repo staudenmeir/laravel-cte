@@ -22,6 +22,10 @@ jobs:
           - php: 8.4
             release: stable
             coverage: true
+          - php: 8.3
+            database: oracle
+            release: stable
+            coverage: true
 
     steps:
       - name: Check out code
