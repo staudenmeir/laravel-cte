@@ -10,16 +10,13 @@
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/database": "^11.0"
+        "illuminate/database": "^12.0"
     },
     "require-dev": {
-        "harrygulliford/laravel-firebird": "^3.3",
-        "laravel/framework": "^11.0",
-        "orchestra/testbench-core": "^9.5",
+        "laravel/framework": "^12.0",
+        "orchestra/testbench-core": "^10.0",
         "phpstan/phpstan": "^2.0",
-        "phpunit/phpunit": "^11.0",
-        "singlestoredb/singlestoredb-laravel": "^1.5.4",
-        "yajra/laravel-oci8": "^11.2.4"
+        "phpunit/phpunit": "^11.0"
     },
     "autoload": {
         "psr-4": {
