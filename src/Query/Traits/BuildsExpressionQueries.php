@@ -20,7 +20,7 @@ trait BuildsExpressionQueries
     /**
      * The common table expressions.
      *
-     * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>|null,
+     * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression<*>>|null,
      *       recursive: bool, materialized: bool|null,
      *       cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}>
      */
@@ -29,7 +29,7 @@ trait BuildsExpressionQueries
     /**
      * The common table expressions for union queries.
      *
-     * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>|null,
+     * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression<*>>|null,
      *        recursive: bool, materialized: bool|null,
      *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}>
      */
@@ -95,7 +95,7 @@ trait BuildsExpressionQueries
      *
      * @param string $name
      * @param string|\Closure|\Illuminate\Database\Query\Builder $query
-     * @param list<string|\Illuminate\Database\Query\Expression>|null $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>>|null $columns
      * @param bool $recursive
      * @param bool|null $materialized
      * @param array{columns: list<string>, markColumn: string, pathColumn: string}|null $cycle
@@ -124,7 +124,7 @@ trait BuildsExpressionQueries
      *
      * @param string $name
      * @param string|\Closure|\Illuminate\Database\Query\Builder $query
-     * @param list<string|\Illuminate\Database\Query\Expression>|null $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>>|null $columns
      * @param array{columns: list<string>, markColumn: string, pathColumn: string}|null $cycle
      * @return $this
      */
@@ -141,7 +141,7 @@ trait BuildsExpressionQueries
      * @param list<string>|string $cycleColumns
      * @param string $markColumn
      * @param string $pathColumn
-     * @param list<string|\Illuminate\Database\Query\Expression>|null $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>>|null $columns
      * @return $this
      */
     public function withRecursiveExpressionAndCycleDetection($name, $query, $cycleColumns, $markColumn = 'is_cycle', $pathColumn = 'path', $columns = null)
@@ -160,7 +160,7 @@ trait BuildsExpressionQueries
      *
      * @param string $name
      * @param string|\Closure|\Illuminate\Database\Query\Builder $query
-     * @param list<string|\Illuminate\Database\Query\Expression>|null $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>>|null $columns
      * @return $this
      */
     public function withMaterializedExpression($name, $query, $columns = null)
@@ -173,7 +173,7 @@ trait BuildsExpressionQueries
      *
      * @param string $name
      * @param string|\Closure|\Illuminate\Database\Query\Builder $query
-     * @param list<string|\Illuminate\Database\Query\Expression>|null $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>>|null $columns
      * @return $this
      */
     public function withNonMaterializedExpression($name, $query, $columns = null)
@@ -197,7 +197,7 @@ trait BuildsExpressionQueries
     /**
      * Insert new records into the table using a subquery.
      *
-     * @param list<string|\Illuminate\Database\Query\Expression> $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>> $columns
      * @param string|\Closure|\Illuminate\Database\Eloquent\Builder<*>|\Illuminate\Database\Query\Builder $query
      * @return int
      */

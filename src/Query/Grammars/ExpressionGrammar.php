@@ -10,7 +10,7 @@ interface ExpressionGrammar
      * Compile an insert statement using a subquery into SQL.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param list<string|\Illuminate\Database\Query\Expression> $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>> $columns
      * @param string $sql
      * @return string
      */
