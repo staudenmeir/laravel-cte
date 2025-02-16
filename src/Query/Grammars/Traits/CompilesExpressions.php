@@ -24,7 +24,7 @@ trait CompilesExpressions
      * Compile the common table expressions.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>|null,
+     * @param list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression<*>>|null,
      *        recursive: bool, materialized: bool|null,
      *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}> $expressions
      * @return string
@@ -57,7 +57,7 @@ trait CompilesExpressions
     /**
      * Get the "recursive" keyword.
      *
-     * @param list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>|null,
+     * @param list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression<*>>|null,
      *        recursive: bool, materialized: bool|null,
      *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null}> $expressions
      * @return string
@@ -87,7 +87,7 @@ trait CompilesExpressions
      * Compile the cycle detection.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression>|null,
+     * @param array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression<*>>|null,
      *        recursive: bool, materialized: bool|null,
      *        cycle: array{columns: list<string>, markColumn: string, pathColumn: string}|null} $expression
      * @return string
@@ -132,7 +132,7 @@ trait CompilesExpressions
      * Compile an insert statement using a subquery into SQL.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @param list<string|\Illuminate\Database\Query\Expression> $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>> $columns
      * @param string $sql
      * @return string
      */
