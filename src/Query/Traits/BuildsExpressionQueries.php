@@ -59,7 +59,7 @@ trait BuildsExpressionQueries
      */
     public function __construct(Connection $connection, ?Grammar $grammar = null, ?Processor $processor = null)
     {
-        $grammar = $grammar ?: $connection->withTablePrefix($this->getQueryGrammar($connection));
+        $grammar = $grammar ?: $this->getQueryGrammar($connection);
         $processor = $processor ?: $connection->getPostProcessor();
 
         parent::__construct($connection, $grammar, $processor);
@@ -77,19 +77,17 @@ trait BuildsExpressionQueries
     {
         $driver = $connection->getDriverName();
 
-        $grammar = match ($driver) {
-            'mysql' => new MySqlGrammar(),
-            'mariadb' => new MariaDbGrammar(),
-            'pgsql' => new PostgresGrammar(),
-            'sqlite' => new SQLiteGrammar(),
-            'sqlsrv' => new SqlServerGrammar(),
-            'oracle' => new OracleGrammar(),
-            'singlestore' => new SingleStoreGrammar(),
-            'firebird' => new FirebirdGrammar(),
+        return match ($driver) {
+            'mysql' => new MySqlGrammar($connection),
+            'mariadb' => new MariaDbGrammar($connection),
+            'pgsql' => new PostgresGrammar($connection),
+            'sqlite' => new SQLiteGrammar($connection),
+            'sqlsrv' => new SqlServerGrammar($connection),
+            'oracle' => new OracleGrammar($connection),
+            'singlestore' => new SingleStoreGrammar($connection),
+            'firebird' => new FirebirdGrammar($connection),
             default => throw new RuntimeException('This database is not supported.'), // @codeCoverageIgnore
         };
-
-        return $grammar->setConnection($connection);
     }
 
     /**

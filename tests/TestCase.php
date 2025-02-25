@@ -2,7 +2,6 @@
 
 namespace Staudenmeir\LaravelCte\Tests;
 
-use HarryGulliford\Firebird\FirebirdServiceProvider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -10,8 +9,6 @@ use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Base;
 use Staudenmeir\LaravelCte\Tests\Models\Post;
 use Staudenmeir\LaravelCte\Tests\Models\User;
-use SingleStore\Laravel\SingleStoreProvider;
-use Yajra\Oci8\Oci8ServiceProvider;
 
 abstract class TestCase extends Base
 {
@@ -80,6 +77,7 @@ abstract class TestCase extends Base
 
     protected function getPackageProviders($app)
     {
-        return [Oci8ServiceProvider::class, SingleStoreProvider::class, FirebirdServiceProvider::class];
+        return []; // TODO[L12]
+//        return [Oci8ServiceProvider::class, SingleStoreProvider::class, FirebirdServiceProvider::class];
     }
 }

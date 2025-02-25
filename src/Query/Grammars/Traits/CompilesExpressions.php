@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelCte\Query\Grammars\Traits;
 
+use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelCte\Query\Builder as CteBuilder;
@@ -12,9 +13,13 @@ trait CompilesExpressions
 {
     /**
      * Create a new grammar instance.
+     *
+     * @param \Illuminate\Database\Connection $connection
      */
-    public function __construct()
+    public function __construct(Connection $connection)
     {
+        parent::__construct($connection);
+
         array_unshift($this->selectComponents, 'expressions');
 
         $this->selectComponents[] = 'recursionLimit';
