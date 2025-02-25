@@ -32,9 +32,6 @@
         "sort-packages": true
     },
     "extra": {
-        "branch-alias": {
-            "dev-l12": "1.12.x-dev"
-        },
         "laravel": {
             "providers": [
                 "Staudenmeir\\LaravelCte\\DatabaseServiceProvider"
