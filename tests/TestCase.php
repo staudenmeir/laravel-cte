@@ -7,6 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Base;
+use SingleStore\Laravel\SingleStoreProvider;
 use Staudenmeir\LaravelCte\Tests\Models\Post;
 use Staudenmeir\LaravelCte\Tests\Models\User;
 
@@ -77,7 +78,7 @@ abstract class TestCase extends Base
 
     protected function getPackageProviders($app)
     {
-        return []; // TODO[L12]
-//        return [Oci8ServiceProvider::class, SingleStoreProvider::class, FirebirdServiceProvider::class];
+        return [SingleStoreProvider::class]; // TODO[L12]
+        //        return [Oci8ServiceProvider::class, FirebirdServiceProvider::class];
     }
 }

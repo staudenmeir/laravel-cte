@@ -84,7 +84,11 @@ trait BuildsExpressionQueries
             'sqlite' => new SQLiteGrammar($connection),
             'sqlsrv' => new SqlServerGrammar($connection),
             'oracle' => new OracleGrammar($connection),
-            'singlestore' => new SingleStoreGrammar($connection),
+            'singlestore' => new SingleStoreGrammar(
+                connection: $connection,
+                ignoreOrderByInDeletes: $connection->getConfig('ignore_order_by_in_deletes'),
+                ignoreOrderByInUpdates: $connection->getConfig('ignore_order_by_in_updates')
+            ),
             'firebird' => new FirebirdGrammar($connection),
             default => throw new RuntimeException('This database is not supported.'), // @codeCoverageIgnore
         };
