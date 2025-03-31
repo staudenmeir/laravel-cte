@@ -2,10 +2,10 @@
 
 namespace Staudenmeir\LaravelCte\Query;
 
-use SingleStore\Laravel\Query\Builder;
+use SingleStore\Laravel\Query\SingleStoreQueryBuilder;
 use Staudenmeir\LaravelCte\Query\Traits\BuildsExpressionQueries;
 
-class SingleStoreBuilder extends Builder
+class SingleStoreBuilder extends SingleStoreQueryBuilder
 {
     use BuildsExpressionQueries;
 }
