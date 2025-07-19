@@ -6,7 +6,9 @@ use Illuminate\Database\Query\Builder;
 
 trait CompilesOracleExpressions
 {
-    use CompilesExpressions;
+    use CompilesExpressions {
+        compileSelect as compileSelectTrait;
+    }
 
     /**
      * Get the "recursive" keyword.
@@ -19,6 +21,12 @@ trait CompilesOracleExpressions
     protected function recursiveKeyword(array $expressions)
     {
         return '';
+    }
+
+    /** @inheritDoc */
+    public function compileSelect(Builder $query): string
+    {
+        return $this->compileSelectTrait($query);
     }
 
     /**
