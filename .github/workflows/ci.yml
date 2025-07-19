@@ -13,19 +13,19 @@ jobs:
     strategy:
       matrix:
         php: [ 8.4, 8.3, 8.2 ]
-        database: [ mysql, mariadb, pgsql, sqlite, sqlsrv, singlestore ] # TODO[L12]: oracle, firebird
+        database: [ mysql, mariadb, pgsql, sqlite, sqlsrv, singlestore, oracle ] # TODO[L12]: firebird
         release: [ stable, lowest ]
-#        exclude: # TODO[L12]
-#          - php: 8.4
-#            database: oracle
+        exclude:
+          - php: 8.4
+            database: oracle
         include:
           - php: 8.4
             release: stable
             coverage: true
-#          - php: 8.3 # TODO[L12]
-#            database: oracle
-#            release: stable
-#            coverage: true
+          - php: 8.3
+            database: oracle
+            release: stable
+            coverage: true
 
     steps:
       - name: Check out code
