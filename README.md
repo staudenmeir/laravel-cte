@@ -201,7 +201,7 @@ package: [staudenmeir/laravel-adjacency-list](https://github.com/staudenmeir/lar
 
 ### Lumen
 
-If you are using Lumen, you have to instantiate the query builder manually:
+If you are using Lumen, you need to instantiate the query builder manually:
 
 ```php
 $builder = new \Staudenmeir\LaravelCte\Query\Builder(app('db')->connection());
@@ -210,6 +210,16 @@ $result = $builder->from(...)->withExpression(...)->get();
 ```
 
 In Eloquent, the `QueriesExpressions` trait is required for *all* versions of Lumen.
+
+### Oracle
+
+If you are using Oracle, you need to instantiate the query builder manually:
+
+```php
+$builder = new \Staudenmeir\LaravelCte\Query\OracleBuilder(DB::connection());
+
+$result = $builder->from(...)->withExpression(...)->get();
+```
 
 ## Contributing
 

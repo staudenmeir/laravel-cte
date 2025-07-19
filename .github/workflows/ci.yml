@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         php: [ 8.4, 8.3, 8.2 ]
-        database: [ oracle ] # TODO[L12]: firebird
+        database: [ mysql, mariadb, pgsql, sqlite, sqlsrv, singlestore, oracle ] # TODO[L12]: firebird
         release: [ stable, lowest ]
         include:
           - php: 8.4
