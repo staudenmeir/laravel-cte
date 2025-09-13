@@ -18,6 +18,19 @@ use Staudenmeir\LaravelCte\Query\Grammars\SqlServerGrammar;
 trait BuildsExpressionQueries
 {
     /**
+     * The Laravel native query grammars.
+     *
+     * @var list<class-string<\Illuminate\Database\Query\Grammars\Grammar>>
+     */
+    public const NATIVE_GRAMMARS = [
+        \Illuminate\Database\Query\Grammars\MySqlGrammar::class,
+        \Illuminate\Database\Query\Grammars\MariaDbGrammar::class,
+        \Illuminate\Database\Query\Grammars\PostgresGrammar::class,
+        \Illuminate\Database\Query\Grammars\SQLiteGrammar::class,
+        \Illuminate\Database\Query\Grammars\SqlServerGrammar::class,
+    ];
+
+    /**
      * The common table expressions.
      *
      * @var list<array{name: string, query: string, columns: list<string|\Illuminate\Database\Query\Expression<*>>|null,
@@ -59,7 +72,11 @@ trait BuildsExpressionQueries
      */
     public function __construct(Connection $connection, ?Grammar $grammar = null, ?Processor $processor = null)
     {
-        $grammar = $grammar ?: $this->getQueryGrammar($connection);
+        // Override the provided grammar if it is null or a native grammar
+        if (is_null($grammar) || in_array($grammar::class, self::NATIVE_GRAMMARS)) {
+            $grammar = $this->getQueryGrammar($connection);
+        }
+
         $processor = $processor ?: $connection->getPostProcessor();
 
         parent::__construct($connection, $grammar, $processor);
