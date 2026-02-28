@@ -80,12 +80,7 @@ class EloquentTest extends TestCase
 
     public function testInsertUsing()
     {
-        $id = match ($this->connection) {
-            'firebird' => '(select max("id") from "posts") + "id" as "id"',
-            default => '(select max(id) from posts) + id as id',
-        };
-
-        $query = User::selectRaw($id)
+        $query = User::selectRaw('(select max(id) from posts) + id as id')
             ->addSelect('id as post_id')
             ->selectRaw('1 as views')
             ->where('id', '>', 1);
@@ -98,7 +93,7 @@ class EloquentTest extends TestCase
 
     public function testUpdate()
     {
-        if (in_array($this->connection, ['mariadb', 'oracle', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'oracle'])) {
             $this->markTestSkipped();
         }
 
@@ -113,7 +108,7 @@ class EloquentTest extends TestCase
 
     public function testUpdateWithJoin()
     {
-        if (in_array($this->connection, ['mariadb', 'oracle', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'oracle'])) {
             $this->markTestSkipped();
         }
 
@@ -128,7 +123,7 @@ class EloquentTest extends TestCase
 
     public function testUpdateWithLimit()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'oracle', 'singlestore', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'oracle', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -145,7 +140,7 @@ class EloquentTest extends TestCase
 
     public function testDelete()
     {
-        if (in_array($this->connection, ['mariadb', 'oracle', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'oracle'])) {
             $this->markTestSkipped();
         }
 
@@ -158,7 +153,7 @@ class EloquentTest extends TestCase
 
     public function testDeleteWithJoin()
     {
-        if (in_array($this->connection, ['mariadb', 'oracle', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'oracle'])) {
             $this->markTestSkipped();
         }
 
@@ -172,7 +167,7 @@ class EloquentTest extends TestCase
 
     public function testDeleteWithLimit()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'oracle', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'oracle'])) {
             $this->markTestSkipped();
         }
 
