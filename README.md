@@ -20,7 +20,6 @@ Supports Laravel 5.5+.
 - SQL Server 2008+
 - Oracle 9.2+
 - SingleStore 8.1+
-- Firebird
 
 ## Installation
 
@@ -34,6 +33,7 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 
 | Laravel | Package |
 |:--------|:--------|
+| 13.x    | 1.13    |
 | 12.x    | 1.12    |
 | 11.x    | 1.11    |
 | 10.x    | 1.9     |

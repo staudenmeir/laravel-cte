@@ -6,7 +6,6 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelCte\Query\Builder as CteBuilder;
-use Staudenmeir\LaravelCte\Query\FirebirdBuilder;
 use Staudenmeir\LaravelCte\Query\SingleStoreBuilder;
 
 trait CompilesExpressions
@@ -120,7 +119,7 @@ trait CompilesExpressions
     {
         $sql = parent::compileSelect($query);
 
-        if ($query instanceof CteBuilder || $query instanceof SingleStoreBuilder || $query instanceof FirebirdBuilder) {
+        if ($query instanceof CteBuilder || $query instanceof SingleStoreBuilder) {
             if ($query->unionExpressions) {
                 $sql = $this->compileExpressions($query, $query->unionExpressions) . " $sql";
             }

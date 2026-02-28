@@ -6,7 +6,6 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Database\Query\Processors\Processor;
 use RuntimeException;
-use Staudenmeir\LaravelCte\Query\Grammars\FirebirdGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\MariaDbGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\MySqlGrammar;
 use Staudenmeir\LaravelCte\Query\Grammars\OracleGrammar;
@@ -106,7 +105,6 @@ trait BuildsExpressionQueries
                 ignoreOrderByInDeletes: $connection->getConfig('ignore_order_by_in_deletes'),
                 ignoreOrderByInUpdates: $connection->getConfig('ignore_order_by_in_updates')
             ),
-            'firebird' => new FirebirdGrammar($connection),
             default => throw new RuntimeException('This database is not supported.'), // @codeCoverageIgnore
         };
     }
