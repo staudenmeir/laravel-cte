@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         php: [ 8.5, 8.4, 8.3 ]
-        database: [ mysql, mariadb, pgsql, sqlite, sqlsrv ] # TODO[L13]: singlestore, oracle
+        database: [ mysql, mariadb, pgsql, sqlite, sqlsrv, singlestore ] # TODO[L13]: oracle
         release: [ stable, lowest ]
         include:
           - php: 8.5

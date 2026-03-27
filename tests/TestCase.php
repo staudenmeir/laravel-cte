@@ -80,7 +80,7 @@ abstract class TestCase extends Base
     protected function getPackageProviders($app)
     {
         // TODO[L13]
-        return [];
-        //return [SingleStoreProvider::class, Oci8ServiceProvider::class];
+        return [SingleStoreProvider::class];
+        //return [Oci8ServiceProvider::class];
     }
 }
